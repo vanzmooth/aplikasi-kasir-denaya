@@ -1,0 +1,205 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    color: #333;
+}
+
+.report-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.filter-section {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.card p {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.detail-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.product-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product-item:last-child {
+    border-bottom: none;
+}
+
+.product-name {
+    font-weight: bold;
+}
+
+.product-quantity {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.loading-text {
+    color: #888;
+    text-align: center;
+    padding: 20px;
+}
+
+
+/* Tambahkan di laporan.css */
+.export-btn {
+    margin-left: auto; /* Mendorong tombol ke kanan */
+    padding: 8px 15px;
+    border: 1px solid #17a2b8;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.export-btn:hover {
+    background-color: #138496;
+}
+/* Tambahkan di laporan.css */
+.chart-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.chart-container {
+    position: relative;
+    height: 40vh; /* Tinggi sekitar 40% dari tinggi layar */
+    width: 100%;
+}
+/* Tambahkan di laporan.css */
+.custom-date-range {
+    display: flex;
+    align-items: flex-end; /* Menjajarkan item ke bawah */
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.date-input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-input-group label {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.date-input-group input[type="date"] {
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.apply-btn {
+    padding: 8px 15px;
+    background-color: #28a745; /* Hijau */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.apply-btn:hover {
+    background-color: #218838;
+}
+/* Tambahkan di bagian paling bawah laporan.css */
+
+/* --- Gaya untuk Layar Kecil (Mobile) --- */
+@media (max-width: 768px) {
+    .custom-date-range {
+        /* Izinkan item untuk pindah ke baris baru jika tidak cukup ruang */
+        flex-wrap: wrap; 
+    }
+
+    .date-input-group {
+        /* Buat input tanggal memakai lebar penuh agar rapi */
+        flex-grow: 1;
+        min-width: 150px; /* Beri lebar minimum */
+    }
+
+    .apply-btn {
+        /* Buat tombol Terapkan memakai lebar penuh di barisnya sendiri */
+        width: 100%;
+        margin-top: 10px; /* Beri jarak dari input tanggal di atasnya */
+    }
+}

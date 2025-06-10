@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Stok</title>
+    <link rel="stylesheet" href="stok.css">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Manajemen Stok</h1>
+            <a href="index.html" class="back-link">Kembali ke Kasir</a>
+        </header>
+
+        <main id="stock-list-container">
+            <p class="loading-text">Memuat data stok...</p>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="stok.js"></script>
+</body>
+</html>

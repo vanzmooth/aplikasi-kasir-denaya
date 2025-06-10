@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Jajanan Denaya</title>
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <section class="product-list-section">
+            <header class="menu-header">
+                <img src="https://drive.google.com/thumbnail?id=13ZyIxl07iK1rjbFAduWf4Rnz2osjnCN2" alt="Logo" class="logo">
+                <h1>Pilih Jajanan Favoritmu!</h1>
+            </header>
+            <div id="product-list" class="grid-container">
+                </div>
+        </section>
+
+        <aside class="cart-section">
+            <h2>Pesanan Anda</h2>
+            <div id="cart-items">
+                <p>Keranjang masih kosong.</p>
+            </div>
+            <hr>
+            <div class="total-section">
+                <h3>Total:</h3>
+                <h3 id="total-price">Rp 0</h3>
+            </div>
+            <div class="form-group">
+        <label for="customer-name">Nama Anda (untuk Panggilan)</label>
+        <input type="text" id="customer-name" placeholder="contoh: Denaya">
+    </div>
+            <button id="checkout-button" class="checkout-button">Pesan & Bayar Sekarang</button>
+        </aside>
+
+    </div>
+
+    
+    <div id="payment-overlay" class="overlay-container hidden">
+        <div class="payment-card">
+            <h2>Lakukan Pembayaran</h2>
+            <p>Silakan pindai QRIS di bawah ini dengan aplikasi pembayaran Anda.</p>
+            <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS Code" class="qris-image">
+            <p class="payment-total">Total: <span id="payment-total-amount"></span></p>
+            <button id="confirm-payment-button">Saya Sudah Bayar</button>
+            <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="menu.js"></script>
+
+</body>
+</html>

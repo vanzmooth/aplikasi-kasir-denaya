@@ -1,0 +1,287 @@
+/* Import font dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fdfaf6;
+    margin: 0;
+    color: #4A4A4A;
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Header Menu */
+.menu-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+.logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.menu-header h1 {
+    font-size: 1.8em;
+    color: #333;
+}
+
+/* Daftar Produk */
+.product-list-section, .cart-section {
+    padding: 20px;
+    overflow-y: auto;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+/* Kartu Produk */
+.product-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.product-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.product-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+.product-price {
+    color: #e85a4f; /* Warna merah-oranye */
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Keranjang Belanja */
+.cart-section {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+.cart-section h2 {
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+#cart-items {
+    flex-grow: 1; /* Biarkan daftar item mengisi ruang */
+}
+/* Salin ini dari style.css dan tempelkan ke menu.css */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eef1f5;
+}
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+input.cart-item-quantity {
+    width: 45px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    -moz-appearance: textfield;
+}
+input.cart-item-quantity::-webkit-outer-spin-button,
+input.cart-item-quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.btn-quantity {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2px;
+}
+.btn-quantity:hover {
+    background-color: #e1e1e1;
+}
+.total-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Tombol Checkout */
+.checkout-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #e85a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.checkout-button:hover {
+    background-color: #d84a3f;
+}
+
+/* Tata letak untuk layar kecil (HP) */
+@media (max-width: 800px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .cart-section {
+        margin-top: 20px;
+    }
+}
+
+/* --- Gaya untuk Overlay Pembayaran --- */
+.overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.overlay-container.hidden {
+    opacity: 0;
+    pointer-events: none; /* Membuatnya tidak bisa diklik saat tersembunyi */
+}
+
+.payment-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.overlay-container.hidden .payment-card {
+    transform: scale(0.9);
+}
+
+.qris-image {
+    width: 100%;
+    max-width: 250px;
+    margin: 15px auto;
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.payment-total {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+#confirm-payment-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    border: none;
+    color: #888;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Tambahkan di menu.css */
+.product-card.out-of-stock {
+    opacity: 0.5;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.product-card.out-of-stock::after {
+    content: 'HABIS';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background-color: rgba(220, 53, 69, 0.8);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Tambahkan di menu.css */
+.form-group {
+    margin-top: 15px;
+    text-align: left;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}

@@ -1,0 +1,65 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    color: #333;
+}
+.main-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+header h1 { margin: 0; }
+.back-link { text-decoration: none; color: #007bff; font-weight: bold; }
+.loading-text { color: #888; text-align: center; padding: 20px; }
+
+.stock-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+.stock-info {
+    flex-grow: 1;
+}
+.stock-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-transform: capitalize;
+}
+.stock-quantity {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #007bff;
+}
+.stock-actions button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 40px;
+}
+.btn-add {
+    color: #28a745;
+    border-color: #28a745;
+}
+.btn-adjust {
+    color: #ffc107;
+    border-color: #ffc107;
+}
+.btn-add:hover { background-color: #28a745; color: white; }
+.btn-adjust:hover { background-color: #ffc107; color: black; }
