@@ -58,6 +58,14 @@ function renderProducts() {
     products.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
+        // Cek apakah item ini ada di keranjang
+        const itemInCart = cart.find(cartItem => cartItem.id === product.id);
+        const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+
+        // Tambahkan kelas 'in-cart' jika produk ada di keranjang
+        if (quantityInCart > 0) {
+            productCard.classList.add('in-cart');
+        }
         // LOGIKA BARU: Cek stok berdasarkan stock_id produk
         let isOutOfStock = false;
         if (product.stock_id && inventory[product.stock_id] <= 0) {
@@ -69,6 +77,7 @@ function renderProducts() {
         }
         // --- AKHIR LOGIKA BARU ---
         productCard.innerHTML = `
+            ${quantityInCart > 0 ? `<div class="quantity-badge">${quantityInCart}</div>` : ''}
             <img src="${product.image || 'https://placehold.co/100x100?text=Produk'}" alt="${product.name}">
             <div class="product-name">${product.name}</div>
             <div class="product-price">${formatRupiah(product.price)}</div>
@@ -124,6 +133,7 @@ function addToCart(productId, quantityToAdd = 1) {
     }
     
     renderCart();
+    renderProducts(); // <-- TAMBAHKAN INI
 }
 
 
@@ -155,6 +165,7 @@ function updateCartItemQuantity(productId, action) {
             cart.splice(itemIndex, 1);
         }
         renderCart();
+        renderProducts(); // <-- TAMBAHKAN INI
     }
 }
 
@@ -183,6 +194,7 @@ function setCartItemQuantity(productId, newQuantity) {
     }
     
     renderCart(); // Selalu render ulang untuk menampilkan nilai yang benar
+    renderProducts(); // <-- TAMBAHKAN INI
 }
 
 
@@ -206,6 +218,7 @@ function removeItemFromCart(productId) {
     if (itemIndex > -1) {
         cart.splice(itemIndex, 1); // Hapus item dari array keranjang
         renderCart(); // Render ulang keranjang untuk menampilkan perubahan
+        renderProducts(); // <-- TAMBAHKAN INI
     }
 }
 function renderCart() {

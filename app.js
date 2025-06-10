@@ -78,37 +78,58 @@ async function fetchProducts() {
     }
 }
 
+// Ganti seluruh fungsi renderProducts di app.js dengan ini
 function renderProducts() {
     productListEl.innerHTML = '';
     products.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
+        productCard.setAttribute('data-product-id', product.id); // Tambahkan ID untuk referensi
 
+        // Cek apakah item ini ada di keranjang
+        const itemInCart = cart.find(cartItem => cartItem.id === product.id);
+        const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+
+        // Tambahkan kelas 'in-cart' jika produk ada di keranjang
+        if (quantityInCart > 0) {
+            productCard.classList.add('in-cart');
+        }
+
+        // Cek stok
         let isOutOfStock = false;
         if (product.stock_id && (inventory[product.stock_id] === undefined || inventory[product.stock_id] <= 0)) {
             isOutOfStock = true;
         }
-
-        if (isOutOfStock) productCard.classList.add('out-of-stock');
+        if (isOutOfStock) {
+            productCard.classList.add('out-of-stock');
+        }
         
+        // Buat HTML, termasuk badge kuantitas
         productCard.innerHTML = `
+            ${quantityInCart > 0 ? `<div class="quantity-badge">${quantityInCart}</div>` : ''}
             <img src="${product.image || 'https://placehold.co/100x100?text=Produk'}" alt="${product.name}">
             <div class="product-name">${product.name}</div>
-            <div class="product-price">${formatRupiah(product.price)}</div>`;
+            <div class="product-price">${formatRupiah(product.price)}</div>
+        `;
 
+        // Pasang event listener hanya jika stok ada
         if (!isOutOfStock) {
             let pressTimer, longPressTriggered = false, isScrolling = false;
-            const startPress = () => {
+            const longPressAmount = 5;
+            const longPressDuration = 600;
+
+            const startPress = (e) => {
                 isScrolling = false; longPressTriggered = false;
                 pressTimer = setTimeout(() => {
-                    if (!isScrolling) { longPressTriggered = true; addToCart(product.id, 5); }
-                }, 600);
+                    if (!isScrolling) { longPressTriggered = true; addToCart(product.id, longPressAmount); }
+                }, longPressDuration);
             };
             const cancelPress = () => { isScrolling = true; clearTimeout(pressTimer); };
             const endPress = (e) => {
                 e.preventDefault(); clearTimeout(pressTimer);
                 if (!longPressTriggered && !isScrolling) { addToCart(product.id, 1); }
             };
+
             productCard.addEventListener('mousedown', startPress);
             productCard.addEventListener('mouseup', endPress);
             productCard.addEventListener('mouseleave', cancelPress);
@@ -116,6 +137,7 @@ function renderProducts() {
             productCard.addEventListener('touchend', endPress);
             productCard.addEventListener('touchmove', cancelPress);
         }
+        
         productListEl.appendChild(productCard);
     });
 }
@@ -187,6 +209,7 @@ function addToCart(productId, quantityToAdd = 1) {
     }
     
     renderCart();
+    renderProducts();
 }
 
 
@@ -216,6 +239,7 @@ function updateCartItemQuantity(productId, action) {
             cart.splice(itemIndex, 1);
         }
         renderCart();
+        renderProducts();
     }
 }
 
@@ -225,6 +249,7 @@ function removeItemFromCart(productId) {
     if (itemIndex > -1) {
         cart.splice(itemIndex, 1); // Hapus item dari array keranjang
         renderCart(); // Render ulang keranjang untuk menampilkan perubahan
+        renderProducts();
     }
 }
 // Ganti fungsi setCartItemQuantity di kedua file
@@ -252,6 +277,7 @@ function setCartItemQuantity(productId, newQuantity) {
     }
     
     renderCart(); // Selalu render ulang untuk menampilkan nilai yang benar
+    renderProducts();
 }
 
 
