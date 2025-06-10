@@ -24,6 +24,7 @@ auth.onAuthStateChanged(user => {
         console.log("Pengguna sudah login, menampilkan manajemen stok.");
         // Jika sudah login, baru jalankan fungsi utama
         listenForStockUpdates();
+        listenForStockHistory();
     } else {
         console.log("Tidak ada pengguna yang login, mengarahkan ke halaman login...");
         window.location.href = 'login.html';
@@ -72,6 +73,41 @@ function listenForStockUpdates() {
         console.error("Gagal mendengarkan update stok: ", error);
         stockListContainer.innerHTML = '<p class="loading-text">Gagal memuat data stok. Cek console.</p>';
     });
+}
+
+// Tambahkan fungsi baru ini di stok.js
+function listenForStockHistory() {
+    const historyBody = document.getElementById('stock-history-body');
+
+    // Mendengarkan 50 perubahan terakhir, diurutkan dari yang paling baru
+    db.collection('stock_history').orderBy('timestamp', 'desc').limit(50)
+        .onSnapshot(snapshot => {
+            if (snapshot.empty) {
+                historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada riwayat.</td></tr>';
+                return;
+            }
+
+            historyBody.innerHTML = ''; // Kosongkan riwayat setiap ada update
+            snapshot.docs.forEach(doc => {
+                const log = doc.data();
+                const logDate = log.timestamp ? log.timestamp.toDate().toLocaleString('id-ID') : 'N/A';
+                const changeAmount = log.change > 0 ? `+${log.change}` : log.change;
+                const changeClass = log.change > 0 ? 'stock-in' : 'stock-out';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${logDate}</td>
+                    <td>${log.stock_id.replace(/_/g, ' ')}</td>
+                    <td><span class="stock-change ${changeClass}">${changeAmount}</span></td>
+                    <td>${log.reason}</td>
+                `;
+                historyBody.appendChild(row);
+            });
+
+        }, error => {
+            console.error("Gagal memuat riwayat stok:", error);
+            historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Gagal memuat riwayat.</td></tr>';
+        });
 }
 
 // Event listener untuk tombol-tombol aksi

@@ -16,7 +16,28 @@
         <main id="stock-list-container">
             <p class="loading-text">Memuat data stok...</p>
         </main>
+        <main id="stock-list-container">
+            </main>
+
+        <section class="history-section">
+            <h2>Riwayat Pergerakan Stok</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu</th>
+                            <th>Kategori Stok</th>
+                            <th>Perubahan</th>
+                            <th>Alasan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-history-body">
+                        </tbody>
+                </table>
+            </div>
+        </section>
     </div>
+
 
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>

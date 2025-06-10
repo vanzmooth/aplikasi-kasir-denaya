@@ -63,3 +63,52 @@ header h1 { margin: 0; }
 }
 .btn-add:hover { background-color: #28a745; color: white; }
 .btn-adjust:hover { background-color: #ffc107; color: black; }
+/* Tambahkan di stok.css */
+.history-section {
+    margin-top: 30px;
+}
+
+.table-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow-x: auto; /* Agar bisa di-scroll horizontal jika di layar kecil */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Gaya untuk perubahan stok */
+.stock-change {
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    padding: 2px 6px;
+    color: white;
+}
+
+.stock-in {
+    background-color: #28a745; /* Hijau untuk stok masuk */
+}
+
+.stock-out {
+    background-color: #dc3545; /* Merah untuk stok keluar */
+}
