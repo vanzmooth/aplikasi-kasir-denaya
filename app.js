@@ -128,14 +128,16 @@ function renderCart() {
         cart.forEach(item => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
-            cartItem.innerHTML = `
-                <span class="cart-item-name">${item.name}</span>
-                <div class="cart-item-controls">
-                    <button class="btn-quantity" data-id="${item.id}" data-action="decrease">-</button>
-                    <input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" data-id="${item.id}">
-                    <button class="btn-quantity" data-id="${item.id}" data-action="increase">+</button>
-                </div>
-                <span class="cart-item-price">${formatRupiah(item.price * item.quantity)}</span>`;
+            // ... di dalam renderCart() ...
+cartItem.innerHTML = `
+    <span class="cart-item-name">${item.name}</span>
+    <div class="cart-item-controls">
+        <button class="btn-quantity" data-id="${item.id}" data-action="decrease">-</button>
+        <input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" data-id="${item.id}">
+        <button class="btn-quantity" data-id="${item.id}" data-action="increase">+</button>
+    </div>
+    <span class="cart-item-price">${formatRupiah(item.price * item.quantity)}</span>
+    <button class="btn-remove" data-id="${item.id}">🗑️</button> `;
             cartItemsEl.appendChild(cartItem);
         });
     }
@@ -144,43 +146,114 @@ function renderCart() {
     localStorage.setItem('keranjangBelanja', JSON.stringify(cart));
 }
 
+// Ganti fungsi addToCart di kedua file (app.js & menu.js)
 function addToCart(productId, quantityToAdd = 1) {
     const product = products.find(p => p.id === productId);
-    if (!product || !product.stock_id) { alert("Produk ini tidak memiliki ID Stok, tidak bisa diproses."); return; }
-    const stockId = product.stock_id;
-    const stockAvailable = inventory[stockId] || 0;
-    let quantityOfSameStockInCart = 0;
-    cart.forEach(item => { if (item.stock_id === stockId) quantityOfSameStockInCart += item.quantity; });
-    if (quantityOfSameStockInCart + quantityToAdd > stockAvailable) {
-        alert(`Maaf, stok untuk kategori ini hanya tersisa ${stockAvailable}. Anda sudah memiliki ${quantityOfSameStockInCart} di keranjang.`);
-        return;
-    }
+    if (!product) return;
+
     const existingItem = cart.find(item => item.id === productId);
-    if (existingItem) existingItem.quantity += quantityToAdd;
-    else cart.push({ ...product, quantity: quantityToAdd });
+
+    // Tentukan jumlah yang akan ditambahkan
+    let finalQuantityToAdd = quantityToAdd;
+    // Jika item belum ada di keranjang DAN memiliki aturan min_order
+    if (!existingItem && product.min_order && product.min_order > 1) {
+        // Jika ini adalah klik biasa (qty 1), ubah menjadi qty minimum
+        if (quantityToAdd === 1) {
+            finalQuantityToAdd = product.min_order;
+        }
+    }
+
+    // Validasi Stok (menggunakan finalQuantityToAdd)
+    if (product.stock_id) {
+        const stockId = product.stock_id;
+        const stockAvailable = inventory[stockId] || 0;
+        let quantityOfSameStockInCart = 0;
+        cart.forEach(item => {
+            if (item.stock_id === stockId) {
+                quantityOfSameStockInCart += item.quantity;
+            }
+        });
+        if (quantityOfSameStockInCart + finalQuantityToAdd > stockAvailable) {
+            alert(`Maaf, stok untuk kategori ini hanya tersisa ${stockAvailable}.`);
+            return;
+        }
+    }
+
+    // Logika penambahan ke keranjang
+    if (existingItem) {
+        existingItem.quantity += quantityToAdd; // Long press tetap menambahkan seperti biasa
+    } else {
+        cart.push({ ...product, quantity: finalQuantityToAdd });
+    }
+    
     renderCart();
 }
 
+
+// Ganti fungsi updateCartItemQuantity di kedua file
 function updateCartItemQuantity(productId, action) {
     const itemIndex = cart.findIndex(item => item.id === productId);
-    if (itemIndex > -1) {
-        if (action === 'increase') cart[itemIndex].quantity++;
-        else if (action === 'decrease') {
-            cart[itemIndex].quantity--;
-            if (cart[itemIndex].quantity <= 0) cart.splice(itemIndex, 1);
+    if (itemIndex === -1) return;
+
+    const item = cart[itemIndex];
+    const minOrder = item.min_order || 1;
+
+    if (action === 'increase') {
+        item.quantity++;
+        renderCart();
+    } else if (action === 'decrease') {
+        // Cek apakah pengurangan akan melanggar batas minimal
+        if (item.quantity - 1 < minOrder) {
+            alert(`Minimal pembelian untuk ${item.name} adalah ${minOrder} pcs. Gunakan tombol hapus untuk membatalkan.`);
+            // Jangan lakukan apa-apa jika akan melanggar batas
+            return; 
+        }
+
+        item.quantity--;
+
+        // Jika kuantitas jadi 0 (hanya untuk item tanpa min_order), hapus
+        if (item.quantity <= 0) {
+            cart.splice(itemIndex, 1);
         }
         renderCart();
     }
 }
 
-function setCartItemQuantity(productId, newQuantity) {
+// Tambahkan fungsi baru ini di kedua file
+function removeItemFromCart(productId) {
     const itemIndex = cart.findIndex(item => item.id === productId);
     if (itemIndex > -1) {
-        if (newQuantity >= 1) cart[itemIndex].quantity = newQuantity;
-        else cart.splice(itemIndex, 1);
-        renderCart();
+        cart.splice(itemIndex, 1); // Hapus item dari array keranjang
+        renderCart(); // Render ulang keranjang untuk menampilkan perubahan
     }
 }
+// Ganti fungsi setCartItemQuantity di kedua file
+function setCartItemQuantity(productId, newQuantity) {
+    const itemIndex = cart.findIndex(item => item.id === productId);
+    if (itemIndex === -1) return;
+
+    const item = cart[itemIndex];
+    const minOrder = item.min_order || 1;
+    const quantity = parseInt(newQuantity);
+
+    if (isNaN(quantity)) {
+        renderCart(); // Jika input bukan angka, kembalikan ke nilai semula
+        return;
+    }
+
+    if (quantity < minOrder) {
+        alert(`Minimal pembelian untuk ${item.name} adalah ${minOrder} pcs.`);
+        // Jika input 0 atau kurang dan tidak ada min_order, hapus itemnya
+        if (quantity <= 0 && minOrder <= 1) {
+            cart.splice(itemIndex, 1);
+        }
+    } else {
+        item.quantity = quantity;
+    }
+    
+    renderCart(); // Selalu render ulang untuk menampilkan nilai yang benar
+}
+
 
 async function updateStock(items) {
     const stockRef = db.collection('counters').doc('stock_tracker');
@@ -412,10 +485,17 @@ auth.onAuthStateChanged(user => {
 });
 
 cartItemsEl.addEventListener('click', (event) => {
+    // Logika untuk tombol kuantitas
     if (event.target.classList.contains('btn-quantity')) {
         const productId = event.target.dataset.id;
         const action = event.target.dataset.action;
         updateCartItemQuantity(productId, action);
+    }
+    
+    // Logika baru untuk tombol hapus
+    if (event.target.classList.contains('btn-remove')) {
+        const productId = event.target.dataset.id;
+        removeItemFromCart(productId);
     }
 });
 cartItemsEl.addEventListener('change', (event) => {
