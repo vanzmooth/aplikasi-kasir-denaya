@@ -378,3 +378,92 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     background-color: #6c757d; /* Abu-abu */
     color: white;
 }
+/* Tambahkan di style.css */
+/* Membuat seluruh item riwayat bisa di-klik (kecuali tombol) */
+/* GANTI SEMUA GAYA LAMA DARI .transaction-item KE BAWAH DENGAN INI */
+.transaction-item {
+    display: flex; /* Kunci utama: menggunakan Flexbox */
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.tx-main-info {
+    flex: 2; /* Biarkan kolom utama lebih besar */
+    display: flex;
+    flex-direction: column;
+}
+.tx-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.tx-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.tx-queue {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #007bff;
+}
+.tx-details {
+    display: flex;
+    flex-direction: column;
+}
+.tx-customer-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.tx-date {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-top: 8px;
+}
+.tx-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.tx-item-list-container {
+    flex: 1; /* Biarkan kolom rincian lebih kecil */
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+.tx-item-list-container p {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.tx-item-list-container ul {
+    margin: 0;
+    padding-left: 18px;
+}
+.tx-item-list-container li {
+    margin-bottom: 4px;
+}
+
+/* Penyesuaian untuk status badge, dll. */
+.status-badge { /* ... (Tidak berubah) ... */ }
+.status-preparing { /* ... (Tidak berubah) ... */ }
+.status-ready { /* ... (Tidak berubah) ... */ }
+.status-complete { /* ... (Tidak berubah) ... */ }
+.btn-action { /* ... (Tidak berubah) ... */ }
+.btn-action:hover { /* ... (Tidak berubah) ... */ }
+.btn-action:disabled { /* ... (Tidak berubah) ... */ }
+
+/* Tampilan di HP: Kolom kanan akan turun ke bawah */
+@media (max-width: 768px) {
+    .transaction-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
