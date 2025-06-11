@@ -499,3 +499,80 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     position: relative; /* Ini penting untuk positioning badge */
     /* ... sisa gaya .product-card Anda ... */
 }
+
+/* Tambahkan di style.css */
+.settings-section {
+    background-color: #e9ecef;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-label {
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+/* GANTI SEMUA GAYA .payment-switch LAMA DENGAN BLOK BARU INI */
+
+.payment-switch {
+    position: relative;
+    display: flex;
+    background-color: #e9ecef; /* Warna latar belakang abu-abu */
+    border-radius: 20px;
+    padding: 2px;
+    border: 1px solid #ccc;
+}
+
+.payment-switch input[type="radio"] {
+    display: none; /* Sembunyikan radio button asli */
+}
+
+.payment-switch label {
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 2; /* Pastikan label di atas slider */
+    transition: color 0.3s ease-in-out;
+    font-size: 0.85em;
+    color: #555; /* Warna teks default */
+    user-select: none; /* Agar teks tidak bisa di-select */
+}
+
+/* Elemen slider yang bergerak */
+.payment-switch .slider {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1; /* Posisikan slider di belakang label */
+}
+
+/* Saat radio 'manual' dipilih */
+.payment-switch input#mode-manual:checked ~ .slider {
+    transform: translateX(0%);
+}
+.payment-switch input#mode-manual:checked + label {
+    color: #007bff; /* Warna teks aktif */
+    font-weight: bold;
+}
+
+/* Saat radio 'otomatis' dipilih */
+.payment-switch input#mode-otomatis:checked ~ .slider {
+    transform: translateX(100%);
+}
+.payment-switch input#mode-otomatis:checked + label {
+    color: #007bff; /* Warna teks aktif */
+    font-weight: bold;
+}

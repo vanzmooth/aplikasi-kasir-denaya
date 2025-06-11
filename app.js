@@ -28,7 +28,8 @@ const totalPriceEl = document.getElementById('total-price');
 const btnPay = document.getElementById('btn-pay');
 const validationListEl = document.getElementById('validation-list');
 const transactionListEl = document.getElementById('transaction-list');
-
+const modeManualRadio = document.getElementById('mode-manual');
+const modeOtomatisRadio = document.getElementById('mode-otomatis');
 // =======================================================
 // --- FUNGSI-FUNGSI UTAMA ---
 // =======================================================
@@ -36,7 +37,35 @@ const transactionListEl = document.getElementById('transaction-list');
 function formatRupiah(number) {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
 }
+// Tambahkan fungsi baru ini di app.js
+function setupPaymentSwitch() {
+    const paymentSettingRef = db.collection('settings').doc('payment');
 
+    // Mendengarkan perubahan pada pengaturan secara real-time
+    paymentSettingRef.onSnapshot(doc => {
+        if (doc.exists) {
+            const activeMethod = doc.data().active_method;
+            console.log(`Mode pembayaran aktif saat ini: ${activeMethod}`);
+            if (activeMethod === 'otomatis') {
+                modeOtomatisRadio.checked = true;
+            } else {
+                modeManualRadio.checked = true;
+            }
+        }
+    });
+
+    // Event saat kasir mengubah mode
+    modeManualRadio.addEventListener('change', () => {
+        if (modeManualRadio.checked) {
+            paymentSettingRef.update({ active_method: 'manual' }).catch(err => console.error(err));
+        }
+    });
+    modeOtomatisRadio.addEventListener('change', () => {
+        if (modeOtomatisRadio.checked) {
+            paymentSettingRef.update({ active_method: 'otomatis' }).catch(err => console.error(err));
+        }
+    });
+}
 // Tambahkan kembali fungsi ini di app.js
 function createReceiptLine(leftText, rightText, maxChars = 30) {
     const leftLength = leftText.length;
@@ -623,4 +652,5 @@ async function initializeApp() {
     renderCart();
     fetchTransactions();
     listenForPendingOrders();
+    setupPaymentSwitch(); // <-- Panggil fungsi saklar di sini
 }
