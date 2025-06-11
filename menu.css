@@ -174,8 +174,13 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     }
 }
 
-/* --- Gaya untuk Overlay Pembayaran --- */
-.overlay-container {
+/* ============================================= */
+/* --- GAYA FINAL UNTUK OVERLAY PEMBAYARAN --- */
+/* ============================================= */
+
+/* Wadah utama overlay yang menutupi seluruh layar */
+/* ...DENGAN VERSI BARU INI */
+#payment-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -184,57 +189,143 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* Diubah agar scroll selalu mulai dari atas modal */
+    align-items: flex-start;
+    /* KUNCI UTAMA: Izinkan scroll vertikal jika konten terlalu tinggi */
+    overflow-y: auto;
     z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+    /* Beri jarak dari tepi layar agar tidak terlalu mepet */
+    padding: 20px; 
+    box-sizing: border-box;
 }
 
-.overlay-container.hidden {
-    opacity: 0;
-    pointer-events: none; /* Membuatnya tidak bisa diklik saat tersembunyi */
+/* Kelas untuk menyembunyikan overlay */
+#payment-overlay.hidden {
+    display: none !important;
 }
 
-.payment-card {
-    background-color: white;
-    padding: 30px;
+/* Kartu putih di tengah */
+.payment-modal {
+    background: white;
+    padding: 20px 25px; /* Sedikit penyesuaian padding */
     border-radius: 12px;
+    width: 100%;
+    max-width: 380px; /* Sedikit diperkecil agar pas */
     text-align: center;
-    width: 90%;
-    max-width: 400px;
-    transform: scale(1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
-.overlay-container.hidden .payment-card {
-    transform: scale(0.9);
+.payment-modal h2 {
+    font-size: 1.4em; /* Ukuran judul */
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.instruction-text {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+/* GANTI SEMUA GAYA DARI .total-section KE BAWAH DENGAN INI */
+
+.total-section {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    /* Kita gunakan display: grid untuk menata item secara rapi */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dua kolom dengan lebar sama */
+    gap: 15px; /* Jarak antar item */
+}
+
+/* Setiap item di dalam kotak total */
+.total-item-vertical {
+    display: flex;
+    flex-direction: column; /* Tumpuk label dan nilai secara vertikal */
+    text-align: center; /* Pusatkan teks */
+}
+
+/* Gaya untuk semua label (teks atas) */
+.total-item-vertical .total-label {
+    font-size: 0.8em; /* Ukuran kecil */
+    color: #6c757d;
+    margin-bottom: 4px;
+    text-transform: uppercase; /* Membuatnya huruf besar agar terlihat seperti judul */
+}
+
+/* Gaya untuk semua nilai (angka bawah) */
+.total-item-vertical .total-value {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #495057;
+}
+
+.unique-code-text {
+    color: #dc3545; /* Warna merah untuk kode unik */
+}
+
+/* Aturan khusus untuk kotak TOTAL UNIK */
+.final-total-vertical {
+    /* Mengambil ruang 2 kolom agar posisinya di bawah dan penuh */
+    grid-column: 1 / -1; 
+    background-color: #e3f2fd; /* Memberi latar belakang berbeda */
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+.final-total-vertical .total-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.final-total-vertical .final-total-value {
+    font-size: 1.8em; /* Ukuran paling besar */
+    font-weight: 700;
+    color: #007bff;
 }
 
 .qris-image {
     width: 100%;
-    max-width: 250px;
-    margin: 15px auto;
-    border: 1px solid #eee;
-    padding: 5px;
+    max-width: 220px; /* Ukuran QRIS agar tidak terlalu besar */
     border-radius: 8px;
-}
-
-.payment-total {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 #confirm-payment-button {
     width: 100%;
     padding: 12px;
-    margin-top: 20px;
-    background-color: #28a745;
+    font-size: 1em;
+    font-weight: bold;
     color: white;
+    background-color: #28a745;
     border: none;
     border-radius: 8px;
-    font-size: 1.1em;
     cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.important-note {
+    font-size: 0.85em;
+    color: #555;
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 20px;
 }
 
 .cancel-btn {
@@ -316,4 +407,11 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 .product-card {
     position: relative; /* Ini penting untuk positioning badge */
     /* ... sisa gaya .product-card Anda ... */
+}
+.hidden {
+    display: none !important;
+}
+/* Tambahkan ini di menu.css */
+.overlay-container-hidden {
+    display: none; /* Perintah untuk menyembunyikan total elemen */
 }

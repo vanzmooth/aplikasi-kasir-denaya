@@ -39,15 +39,38 @@
 
     
     <div id="payment-overlay" class="overlay-container hidden">
-        <div class="payment-card">
-            <h2>Lakukan Pembayaran</h2>
-            <p>Silakan pindai QRIS di bawah ini dengan aplikasi pembayaran Anda.</p>
-            <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS Code" class="qris-image">
-            <p class="payment-total">Total: <span id="payment-total-amount"></span></p>
-            <button id="confirm-payment-button">Saya Sudah Bayar</button>
-            <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
-        </div>
+    <div class="payment-modal">
+        <h2>Konfirmasi Pembayaran</h2>
+        <p class="instruction-text">
+            Pindai QRIS di bawah ini, lalu masukkan nominal pembayaran
+            sesuai <strong>TOTAL UNIK</strong> yang tertera.
+        </p>
+
+        <div class="total-section">
+    <div class="total-item-vertical">
+        <span class="total-label">Total Belanja</span>
+        <span id="original-total-amount" class="total-value">Rp 0</span>
     </div>
+    <div class="total-item-vertical">
+        <span class="total-label">Kode Unik Verifikasi</span>
+        <span id="unique-code" class="total-value unique-code-text">+ Rp 0</span>
+    </div>
+    <div class="total-item-vertical final-total-vertical">
+        <span class="total-label">TOTAL UNIK ANDA</span>
+        <span id="final-unique-total" class="total-value final-total-value">Rp 0</span>
+    </div>
+</div>
+        
+        <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS" class="qris-image"> 
+        
+        <button id="confirm-payment-button">Saya Sudah Bayar</button>
+        <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
+
+        <p class="important-note">
+            Setelah membayar, <strong>harap tetap di halaman ini & tunjukkan ke kasir</strong> untuk persetujuan pesanan.
+        </p>
+    </div>
+</div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>

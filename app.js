@@ -169,41 +169,46 @@ cartItem.innerHTML = `
 }
 
 // Ganti fungsi addToCart di kedua file (app.js & menu.js)
+// Ganti seluruh fungsi addToCart di app.js dengan versi ini
 function addToCart(productId, quantityToAdd = 1) {
     const product = products.find(p => p.id === productId);
-    if (!product) return;
+    if (!product || !product.stock_id) {
+        alert("Produk ini tidak memiliki ID Stok, tidak bisa diproses.");
+        return;
+    }
 
     const existingItem = cart.find(item => item.id === productId);
 
-    // Tentukan jumlah yang akan ditambahkan
-    let finalQuantityToAdd = quantityToAdd;
-    // Jika item belum ada di keranjang DAN memiliki aturan min_order
-    if (!existingItem && product.min_order && product.min_order > 1) {
-        // Jika ini adalah klik biasa (qty 1), ubah menjadi qty minimum
-        if (quantityToAdd === 1) {
-            finalQuantityToAdd = product.min_order;
-        }
+    // --- LOGIKA BARU UNTUK MINIMAL ORDER & LONG PRESS ---
+    let finalQuantityToAdd;
+    if (existingItem) {
+        // Jika item sudah ada, cukup tambahkan kuantitas seperti biasa
+        finalQuantityToAdd = quantityToAdd;
+    } else {
+        // Jika ini item baru, tentukan kuantitas awalnya
+        const minOrder = product.min_order || 1;
+        // Ambil nilai yang lebih besar antara minimal order dan kuantitas dari input (1 atau 5)
+        finalQuantityToAdd = Math.max(minOrder, quantityToAdd);
     }
+    // --- AKHIR LOGIKA BARU ---
 
     // Validasi Stok (menggunakan finalQuantityToAdd)
-    if (product.stock_id) {
-        const stockId = product.stock_id;
-        const stockAvailable = inventory[stockId] || 0;
-        let quantityOfSameStockInCart = 0;
-        cart.forEach(item => {
-            if (item.stock_id === stockId) {
-                quantityOfSameStockInCart += item.quantity;
-            }
-        });
-        if (quantityOfSameStockInCart + finalQuantityToAdd > stockAvailable) {
-            alert(`Maaf, stok untuk kategori ini hanya tersisa ${stockAvailable}.`);
-            return;
+    const stockId = product.stock_id;
+    const stockAvailable = inventory[stockId] || 0;
+    let quantityOfSameStockInCart = 0;
+    cart.forEach(item => {
+        if (item.stock_id === stockId) {
+            quantityOfSameStockInCart += item.quantity;
         }
+    });
+    if (quantityOfSameStockInCart + finalQuantityToAdd > stockAvailable) {
+        alert(`Maaf, stok untuk kategori ini hanya tersisa ${stockAvailable}.`);
+        return;
     }
 
     // Logika penambahan ke keranjang
     if (existingItem) {
-        existingItem.quantity += quantityToAdd; // Long press tetap menambahkan seperti biasa
+        existingItem.quantity += finalQuantityToAdd;
     } else {
         cart.push({ ...product, quantity: finalQuantityToAdd });
     }
@@ -604,6 +609,8 @@ btnPay.addEventListener('click', async () => {
         cart = [];
         localStorage.removeItem('keranjangBelanja');
         renderCart();
+        renderProducts(); // <-- TAMBAHKAN BARIS INI
+
     } catch (error) {
         console.error("Error pada proses pembayaran kasir:", error);
         alert(`Transaksi gagal: ${error.message}`);
