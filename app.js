@@ -132,7 +132,7 @@ function renderProducts() {
         if (isOutOfStock) {
             productCard.classList.add('out-of-stock');
         }
-        
+
         // Buat HTML, termasuk badge kuantitas
         productCard.innerHTML = `
             ${quantityInCart > 0 ? `<div class="quantity-badge">${quantityInCart}</div>` : ''}
@@ -166,7 +166,7 @@ function renderProducts() {
             productCard.addEventListener('touchend', endPress);
             productCard.addEventListener('touchmove', cancelPress);
         }
-        
+
         productListEl.appendChild(productCard);
     });
 }
@@ -180,7 +180,7 @@ function renderCart() {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             // ... di dalam renderCart() ...
-cartItem.innerHTML = `
+            cartItem.innerHTML = `
     <span class="cart-item-name">${item.name}</span>
     <div class="cart-item-controls">
         <button class="btn-quantity" data-id="${item.id}" data-action="decrease">-</button>
@@ -241,7 +241,7 @@ function addToCart(productId, quantityToAdd = 1) {
     } else {
         cart.push({ ...product, quantity: finalQuantityToAdd });
     }
-    
+
     renderCart();
     renderProducts();
 }
@@ -263,7 +263,7 @@ function updateCartItemQuantity(productId, action) {
         if (item.quantity - 1 < minOrder) {
             alert(`Minimal pembelian untuk ${item.name} adalah ${minOrder} pcs. Gunakan tombol hapus untuk membatalkan.`);
             // Jangan lakukan apa-apa jika akan melanggar batas
-            return; 
+            return;
         }
 
         item.quantity--;
@@ -309,7 +309,7 @@ function setCartItemQuantity(productId, newQuantity) {
     } else {
         item.quantity = quantity;
     }
-    
+
     renderCart(); // Selalu render ulang untuk menampilkan nilai yang benar
     renderProducts();
 }
@@ -365,7 +365,7 @@ async function finalizeTransaction(items, customerName = 'Walk-in Customer', pen
 
     // 2. Dapatkan nomor antrian baru
     const queueNumber = await getNextQueueNumber();
-    
+
     // 3. Siapkan data transaksi final
     const totalAmount = items.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0);
     const finalTransactionData = {
@@ -375,17 +375,17 @@ async function finalizeTransaction(items, customerName = 'Walk-in Customer', pen
         status: "Sedang Disiapkan",
         queueNumber: queueNumber,
         customerName: customerName,
-        originalOrderId: pendingOrderId 
+        originalOrderId: pendingOrderId
     };
 
     // 4. Simpan ke koleksi 'transactions' utama
     const docRef = await db.collection('transactions').add(finalTransactionData);
-    
+
     // 5. HAPUS pesanan tertunda SETELAH semuanya selesai (jika ada)
     if (pendingOrderId) {
         await db.collection('pending_orders').doc(pendingOrderId).delete();
     }
-    
+
     // 6. Kembalikan data transaksi yang sudah lengkap untuk dicetak
     const newTransaction = await docRef.get();
     return { id: newTransaction.id, ...newTransaction.data() };
@@ -413,7 +413,7 @@ function printReceipt(transaction) {
             </div>
         `;
     });
-    
+
     // Kita gunakan fungsi createReceiptLine yang sudah ada untuk Total
     const totalLine = createReceiptLine('TOTAL', formatRupiah(transaction.totalAmount));
 
@@ -474,8 +474,8 @@ function printReceipt(transaction) {
             printWindow.document.write(receiptHtml);
             printWindow.document.close();
             printWindow.focus();
-            
-            printWindow.onload = function() {
+
+            printWindow.onload = function () {
                 printWindow.print();
             };
         });
@@ -488,7 +488,7 @@ function fetchTransactions() {
         transactionListEl.innerHTML = '';
         snapshot.docs.forEach(doc => {
             const tx = { id: doc.id, ...doc.data() };
-            const txDate = tx.createdAt.toDate().toLocaleString('id-ID', {hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short'});
+            const txDate = tx.createdAt.toDate().toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
             let itemsDetailHtml = '<ul class="tx-items-list">';
             tx.items.forEach(item => { itemsDetailHtml += `<li>${item.name} (x${item.quantity})</li>`; });
             itemsDetailHtml += '</ul>';
@@ -497,11 +497,11 @@ function fetchTransactions() {
             txItem.innerHTML = `
                 <div class="tx-main-info">
                     <div class="tx-summary">
-                        <div class="tx-info"><span class="tx-queue">#${tx.queueNumber}</span><div class="tx-details"><span class="tx-customer-name">${tx.customerName||''}</span><span class="tx-total">${formatRupiah(tx.totalAmount)}</span></div></div>
-                        <div class="tx-status"><span class="status-badge ${tx.status==='Selesai'?'status-complete':(tx.status==='Siap Diambil'?'status-ready':'status-preparing')}">${tx.status}</span></div>
+                        <div class="tx-info"><span class="tx-queue">#${tx.queueNumber}</span><div class="tx-details"><span class="tx-customer-name">${tx.customerName || ''}</span><span class="tx-total">${formatRupiah(tx.totalAmount)}</span></div></div>
+                        <div class="tx-status"><span class="status-badge ${tx.status === 'Selesai' ? 'status-complete' : (tx.status === 'Siap Diambil' ? 'status-ready' : 'status-preparing')}">${tx.status}</span></div>
                     </div>
                     <div class="tx-date">${txDate}</div>
-                    <div class="tx-actions"><button class="btn-action btn-reprint" data-id="${tx.id}">Cetak</button><button class="btn-action btn-change-status" data-id="${tx.id}" data-status="${tx.status}" ${tx.status==='Selesai'?'disabled':''}>${tx.status==='Sedang Disiapkan'?'Siap':'Selesai'}</button></div>
+                    <div class="tx-actions"><button class="btn-action btn-reprint" data-id="${tx.id}">Cetak</button><button class="btn-action btn-change-status" data-id="${tx.id}" data-status="${tx.status}" ${tx.status === 'Selesai' ? 'disabled' : ''}>${tx.status === 'Sedang Disiapkan' ? 'Siap' : 'Selesai'}</button></div>
                 </div>
                 <div class="tx-item-list-container hidden"><p><strong>Rincian Pesanan:</strong></p>${itemsDetailHtml}</div>`;
             transactionListEl.appendChild(txItem);
@@ -509,24 +509,63 @@ function fetchTransactions() {
     }, err => { console.error("Error mendengarkan transaksi: ", err); });
 }
 
+// Ganti seluruh fungsi listenForPendingOrders di app.js dengan ini
+// GANTI SELURUH FUNGSI listenForPendingOrders ANDA DENGAN VERSI FINAL INI
 function listenForPendingOrders() {
-    db.collection('pending_orders').where('status', '==', 'menunggu_validasi').onSnapshot(snapshot => {
+    console.log("Mendengarkan semua pesanan yang tertunda...");
+
+    db.collection('pending_orders').onSnapshot(snapshot => {
+
+        // Bersihkan panel validasi setiap kali ada perubahan data
         validationListEl.innerHTML = '';
-        if (snapshot.empty) { validationListEl.innerHTML = '<p class="info-text">Belum ada pembayaran yang perlu divalidasi.</p>'; }
-        else {
-            snapshot.docs.forEach(doc => {
-                const order = doc.data();
+        let manualOrdersFound = false;
+
+        snapshot.docs.forEach(doc => {
+            const orderData = doc.data();
+            const orderId = doc.id;
+
+            // --- INILAH LOGIKA SAKLAR UTAMANYA ---
+
+            if (orderData.status === 'siap_diproses') {
+                // JIKA OTOMATIS: Langsung proses di sini, JANGAN ditampilkan di panel
+                console.log(`Memproses pesanan otomatis dari ${orderData.customerName}...`);
+                finalizeTransaction(orderData.items, orderData.customerName, orderId)
+                    .then(() => {
+                        alert(`Pesanan Otomatis Masuk untuk ${orderData.customerName}!`);
+                    })
+                    .catch(error => {
+                        console.error("Gagal memproses pesanan otomatis:", error);
+                        alert(`GAGAL memproses pesanan dari ${orderData.customerName}: ${error.message}`);
+                        // Hapus pesanan yang gagal agar tidak terjebak
+                        db.collection('pending_orders').doc(orderId).delete();
+                    });
+            }
+            else if (orderData.status === 'menunggu_validasi') {
+                // JIKA MANUAL: Baru tampilkan di panel validasi
+                manualOrdersFound = true;
                 const validationItem = document.createElement('div');
                 validationItem.className = 'validation-item';
-                let itemsSummary = order.items.map(item => `${item.name} (x${item.quantity})`).join(', ');
+                let itemsSummary = orderData.items.map(item => `${item.name} (x${item.quantity})`).join(', ');
                 validationItem.innerHTML = `
-                    <p class="validation-name">${order.customerName}</p>
+                    <p class="validation-name">${orderData.customerName}</p>
                     <p class="validation-details">${itemsSummary}</p>
-                    <p class="validation-details"><strong>Total: ${formatRupiah(order.totalAmount)}</strong></p>
-                    <div class="validation-actions"><button class="btn-approve" data-id="${doc.id}">✔️ Setujui</button><button class="btn-reject" data-id="${doc.id}">❌ Tolak</button></div>`;
+                    <p class="validation-details"><strong>Total: ${formatRupiah(orderData.totalAmount)}</strong></p>
+                    <div class="validation-actions">
+                        <button class="btn-approve" data-id="${orderId}">✔️ Setujui</button>
+                        <button class="btn-reject" data-id="${orderId}">❌ Tolak</button>
+                    </div>
+                `;
                 validationListEl.appendChild(validationItem);
-            });
+            }
+        });
+
+        // Tampilkan pesan jika tidak ada pesanan manual sama sekali
+        if (!manualOrdersFound) {
+            validationListEl.innerHTML = '<p class="info-text">Belum ada pembayaran yang perlu divalidasi.</p>';
         }
+
+    }, err => {
+        console.error("Error pada listener pending_orders:", err);
     });
 }
 
@@ -551,7 +590,7 @@ cartItemsEl.addEventListener('click', (event) => {
         const action = event.target.dataset.action;
         updateCartItemQuantity(productId, action);
     }
-    
+
     // Logika baru untuk tombol hapus
     if (event.target.classList.contains('btn-remove')) {
         const productId = event.target.dataset.id;
@@ -617,9 +656,10 @@ transactionListEl.addEventListener('click', async (event) => {
             try {
                 const doc = await db.collection('transactions').doc(transactionId).get();
                 if (doc.exists) { const transactionData = { id: doc.id, ...doc.data() }; printReceipt(transactionData); }
-            } catch (error) { console.error("Gagal mengambil data untuk cetak ulang:", error); // DENGAN BARIS BARU INI
-alert(`Gagal mencetak ulang struk: ${error.message}`);
- }
+            } catch (error) {
+                console.error("Gagal mengambil data untuk cetak ulang:", error); // DENGAN BARIS BARU INI
+                alert(`Gagal mencetak ulang struk: ${error.message}`);
+            }
         }
     } else {
         const transactionItem = target.closest('.transaction-item');

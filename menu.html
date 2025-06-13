@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Jajanan Denaya</title>
     <link rel="stylesheet" href="menu.css">
 </head>
+
 <body>
     <div class="app-container">
-        
+
         <section class="product-list-section">
             <header class="menu-header">
-                <img src="https://drive.google.com/thumbnail?id=13ZyIxl07iK1rjbFAduWf4Rnz2osjnCN2" alt="Logo" class="logo">
+                <img src="https://drive.google.com/thumbnail?id=13ZyIxl07iK1rjbFAduWf4Rnz2osjnCN2" alt="Logo"
+                    class="logo">
                 <h1>Pilih Jajanan Favoritmu!</h1>
             </header>
             <div id="product-list" class="grid-container">
-                </div>
+            </div>
         </section>
 
         <aside class="cart-section">
@@ -29,52 +32,58 @@
                 <h3 id="total-price">Rp 0</h3>
             </div>
             <div class="form-group">
-        <label for="customer-name">Nama Anda (untuk Panggilan)</label>
-        <input type="text" id="customer-name" placeholder="contoh: Denaya">
-    </div>
+                <label for="customer-name">Nama Anda (untuk Panggilan)</label>
+                <input type="text" id="customer-name" placeholder="contoh: Denaya">
+            </div>
             <button id="checkout-button" class="checkout-button">Pesan & Bayar Sekarang</button>
         </aside>
 
     </div>
 
-    
+
     <div id="payment-overlay" class="overlay-container hidden">
-    <div class="payment-modal">
-        <h2>Konfirmasi Pembayaran</h2>
-        <p class="instruction-text">
-            Pindai QRIS di bawah ini, lalu masukkan nominal pembayaran
-            sesuai <strong>TOTAL UNIK</strong> yang tertera.
-        </p>
+        <div class="payment-modal">
+            <h2>Konfirmasi Pembayaran</h2>
+            <p class="instruction-text">
+                Pindai QRIS di bawah ini, lalu masukkan nominal pembayaran
+                sesuai <strong>TOTAL UNIK</strong> yang tertera.
+            </p>
 
-        <div class="total-section">
-    <div class="total-item-vertical">
-        <span class="total-label">Total Belanja</span>
-        <span id="original-total-amount" class="total-value">Rp 0</span>
-    </div>
-    <div class="total-item-vertical">
-        <span class="total-label">Kode Unik Verifikasi</span>
-        <span id="unique-code" class="total-value unique-code-text">+ Rp 0</span>
-    </div>
-    <div class="total-item-vertical final-total-vertical">
-        <span class="total-label">TOTAL UNIK ANDA</span>
-        <span id="final-unique-total" class="total-value final-total-value">Rp 0</span>
-    </div>
-</div>
-        
-        <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS" class="qris-image"> 
-        
-        <button id="confirm-payment-button">Saya Sudah Bayar</button>
-        <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
+            <div class="total-section">
+                <div class="total-item-vertical">
+                    <span class="total-label">Total Belanja</span>
+                    <span id="original-total-amount" class="total-value">Rp 0</span>
+                </div>
+                <div class="total-item-vertical">
+                    <span class="total-label">Kode Unik Verifikasi</span>
+                    <span id="unique-code" class="total-value unique-code-text">+ Rp 0</span>
+                </div>
+                <div class="total-item-vertical final-total-vertical">
+                    <span class="total-label">TOTAL UNIK ANDA</span>
+                    <span id="final-unique-total" class="total-value final-total-value">Rp 0</span>
+                </div>
+            </div>
 
-        <p class="important-note">
-            Setelah membayar, <strong>harap tetap di halaman ini & tunjukkan ke kasir</strong> untuk persetujuan pesanan.
-        </p>
+            <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS" class="qris-image">
+
+            <button id="confirm-payment-button">Saya Sudah Bayar</button>
+            <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
+
+            <p class="important-note">
+                Setelah membayar, <strong>harap tetap di halaman ini & tunjukkan ke kasir</strong> untuk persetujuan
+                pesanan.
+            </p>
+        </div>
     </div>
-</div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-functions-compat.js"></script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="SB-Mid-client-x4pNw1UvoyxVy9ud"></script>
+
     <script src="menu.js"></script>
 
 </body>
+
 </html>
