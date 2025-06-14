@@ -36,6 +36,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmPaymentButton = document.getElementById('confirm-payment-button');
     const cancelPaymentButton = document.getElementById('cancel-payment-button');
 
+    // GANTI BLOK LOGIKA WELCOME OVERLAY LAMA ANDA DENGAN INI
+    // ===============================================
+    // --- LOGIKA BARU UNTUK OVERLAY SELAMAT DATANG ---
+    // ===============================================
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    const closeWelcomeBtn = document.getElementById('close-welcome-btn');
+    const infoButton = document.getElementById('info-button');
+
+    // Cek apakah pengguna sudah pernah berkunjung
+    if (!localStorage.getItem('hasVisitedDenaya')) {
+        // Jika BELUM, tampilkan overlay dengan menghapus kelas 'hidden'
+        welcomeOverlay.classList.remove('hidden');
+    }
+
+    // Listener untuk tombol tutup di overlay
+    closeWelcomeBtn.addEventListener('click', () => {
+        // Sembunyikan overlay dengan menambahkan kembali kelas 'hidden'
+        welcomeOverlay.classList.add('hidden');
+        // Tandai bahwa pengguna sudah pernah berkunjung
+        localStorage.setItem('hasVisitedDenaya', 'true');
+    });
+
+    // Listener untuk tombol info (i) di header
+    infoButton.addEventListener('click', () => {
+        // Tampilkan kembali overlay dengan menghapus kelas 'hidden'
+        welcomeOverlay.classList.remove('hidden');
+    });
+    // --- AKHIR LOGIKA BARU ---
+
     // --- FUNGSI-FUNGSI HELPER (Tidak ada perubahan) ---
     function formatRupiah(number) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number); }
     async function fetchInventory() { try { const doc = await db.collection('counters').doc('stock_tracker').get(); if (doc.exists) { inventory = doc.data(); } } catch (error) { console.error("Gagal memuat stok:", error); } }
@@ -200,6 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelPaymentButton.addEventListener('click', () => {
         paymentOverlay.classList.add('hidden');
     });
+
+
 
     // --- INISIALISASI APLIKASI ---
     async function initializeApp() {

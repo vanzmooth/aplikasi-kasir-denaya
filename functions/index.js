@@ -12,7 +12,7 @@ const cors = require("cors")({
         "http://localhost:5500",
         "http://localhost:3000",
         "http://127.0.0.1:5500",
-        "https://your-domain.netlify.app", // ganti dengan domain Anda
+        "https://jajanan-denaya.netlify.app", // ganti dengan domain Anda
         "https://your-domain.com" // ganti dengan domain produksi Anda
     ],
     methods: ["GET", "POST", "OPTIONS"],

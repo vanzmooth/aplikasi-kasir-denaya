@@ -22,6 +22,7 @@ body {
     text-align: center;
     margin-bottom: 25px;
 }
+
 .logo {
     width: 80px;
     height: 80px;
@@ -29,16 +30,19 @@ body {
     object-fit: cover;
     margin-bottom: 10px;
 }
+
 .menu-header h1 {
     font-size: 1.8em;
     color: #333;
 }
 
 /* Daftar Produk */
-.product-list-section, .cart-section {
+.product-list-section,
+.cart-section {
     padding: 20px;
     overflow-y: auto;
 }
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -49,16 +53,18 @@ body {
 .product-card {
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     padding: 15px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
+
 .product-card img {
     width: 100%;
     height: 120px;
@@ -66,13 +72,16 @@ body {
     border-radius: 8px;
     margin-bottom: 10px;
 }
+
 .product-name {
     font-weight: 600;
     margin-bottom: 5px;
     font-size: 1em;
 }
+
 .product-price {
-    color: #e85a4f; /* Warna merah-oranye */
+    color: #e85a4f;
+    /* Warna merah-oranye */
     font-weight: bold;
     font-size: 1.1em;
 }
@@ -81,18 +90,22 @@ body {
 .cart-section {
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
 }
+
 .cart-section h2 {
     text-align: center;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
 }
+
 #cart-items {
-    flex-grow: 1; /* Biarkan daftar item mengisi ruang */
+    flex-grow: 1;
+    /* Biarkan daftar item mengisi ruang */
 }
+
 /* Salin ini dari style.css dan tempelkan ke menu.css */
 .cart-item {
     display: flex;
@@ -101,11 +114,13 @@ body {
     padding: 10px 0;
     border-bottom: 1px solid #eef1f5;
 }
+
 .cart-item-controls {
     display: flex;
     align-items: center;
     gap: 8px;
 }
+
 input.cart-item-quantity {
     width: 45px;
     text-align: center;
@@ -116,11 +131,13 @@ input.cart-item-quantity {
     font-weight: bold;
     -moz-appearance: textfield;
 }
+
 input.cart-item-quantity::-webkit-outer-spin-button,
 input.cart-item-quantity::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 .btn-quantity {
     width: 24px;
     height: 24px;
@@ -134,9 +151,11 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     align-items: center;
     padding-bottom: 2px;
 }
+
 .btn-quantity:hover {
     background-color: #e1e1e1;
 }
+
 .total-section {
     display: flex;
     justify-content: space-between;
@@ -159,6 +178,7 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
 .checkout-button:hover {
     background-color: #d84a3f;
 }
@@ -169,6 +189,7 @@ input.cart-item-quantity::-webkit-inner-spin-button {
         grid-template-columns: 1fr;
         height: auto;
     }
+
     .cart-section {
         margin-top: 20px;
     }
@@ -195,7 +216,7 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     overflow-y: auto;
     z-index: 1000;
     /* Beri jarak dari tepi layar agar tidak terlalu mepet */
-    padding: 20px; 
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -207,16 +228,19 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 /* Kartu putih di tengah */
 .payment-modal {
     background: white;
-    padding: 20px 25px; /* Sedikit penyesuaian padding */
+    padding: 20px 25px;
+    /* Sedikit penyesuaian padding */
     border-radius: 12px;
     width: 100%;
-    max-width: 380px; /* Sedikit diperkecil agar pas */
+    max-width: 380px;
+    /* Sedikit diperkecil agar pas */
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .payment-modal h2 {
-    font-size: 1.4em; /* Ukuran judul */
+    font-size: 1.4em;
+    /* Ukuran judul */
     margin-top: 0;
     margin-bottom: 10px;
     color: #333;
@@ -239,23 +263,29 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     margin-bottom: 20px;
     /* Kita gunakan display: grid untuk menata item secara rapi */
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dua kolom dengan lebar sama */
-    gap: 15px; /* Jarak antar item */
+    grid-template-columns: 1fr 1fr;
+    /* Dua kolom dengan lebar sama */
+    gap: 15px;
+    /* Jarak antar item */
 }
 
 /* Setiap item di dalam kotak total */
 .total-item-vertical {
     display: flex;
-    flex-direction: column; /* Tumpuk label dan nilai secara vertikal */
-    text-align: center; /* Pusatkan teks */
+    flex-direction: column;
+    /* Tumpuk label dan nilai secara vertikal */
+    text-align: center;
+    /* Pusatkan teks */
 }
 
 /* Gaya untuk semua label (teks atas) */
 .total-item-vertical .total-label {
-    font-size: 0.8em; /* Ukuran kecil */
+    font-size: 0.8em;
+    /* Ukuran kecil */
     color: #6c757d;
     margin-bottom: 4px;
-    text-transform: uppercase; /* Membuatnya huruf besar agar terlihat seperti judul */
+    text-transform: uppercase;
+    /* Membuatnya huruf besar agar terlihat seperti judul */
 }
 
 /* Gaya untuk semua nilai (angka bawah) */
@@ -266,14 +296,16 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 }
 
 .unique-code-text {
-    color: #dc3545; /* Warna merah untuk kode unik */
+    color: #dc3545;
+    /* Warna merah untuk kode unik */
 }
 
 /* Aturan khusus untuk kotak TOTAL UNIK */
 .final-total-vertical {
     /* Mengambil ruang 2 kolom agar posisinya di bawah dan penuh */
-    grid-column: 1 / -1; 
-    background-color: #e3f2fd; /* Memberi latar belakang berbeda */
+    grid-column: 1 / -1;
+    background-color: #e3f2fd;
+    /* Memberi latar belakang berbeda */
     padding: 15px;
     border-radius: 6px;
     margin-top: 5px;
@@ -286,14 +318,16 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 }
 
 .final-total-vertical .final-total-value {
-    font-size: 1.8em; /* Ukuran paling besar */
+    font-size: 1.8em;
+    /* Ukuran paling besar */
     font-weight: 700;
     color: #007bff;
 }
 
 .qris-image {
     width: 100%;
-    max-width: 220px; /* Ukuran QRIS agar tidak terlalu besar */
+    max-width: 220px;
+    /* Ukuran QRIS agar tidak terlalu besar */
     border-radius: 8px;
     margin-bottom: 20px;
 }
@@ -362,12 +396,14 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     margin-top: 15px;
     text-align: left;
 }
+
 .form-group label {
     display: block;
     margin-bottom: 5px;
     font-size: 0.9em;
     font-weight: 600;
 }
+
 .form-group input {
     width: 100%;
     padding: 10px;
@@ -376,6 +412,7 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
 /* Tambahkan di menu.css */
 
 /* Gaya untuk kartu produk yang sudah ada di keranjang */
@@ -388,7 +425,8 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     position: absolute;
     top: -10px;
     right: -10px;
-    background-color: #e85a4f; /* Warna yang sama dengan harga */
+    background-color: #e85a4f;
+    /* Warna yang sama dengan harga */
     color: white;
     width: 28px;
     height: 28px;
@@ -399,19 +437,115 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     font-weight: bold;
     font-size: 1em;
     border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
 
 /* Pastikan kartu produk bisa menampung badge */
 .product-card {
-    position: relative; /* Ini penting untuk positioning badge */
+    position: relative;
+    /* Ini penting untuk positioning badge */
     /* ... sisa gaya .product-card Anda ... */
 }
+
 .hidden {
     display: none !important;
 }
-/* Tambahkan ini di menu.css */
-.overlay-container-hidden {
-    display: none; /* Perintah untuk menyembunyikan total elemen */
+
+/* Wadah utama overlay yang menutupi seluruh layar */
+.overlay-container {
+    position: fixed;
+    /* Kunci #1: Posisi tetap menutupi layar */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    /* Kita tidak lagi menggunakan display: flex di sini */
+}
+
+/* Kelas untuk menyembunyikan overlay */
+.overlay-container.hidden {
+    display: none !important;
+}
+
+/* Tambahkan di menu.css */
+
+/* Kartu Modal (baik untuk welcome maupun payment) */
+.welcome-modal,
+.payment-modal {
+    /* Kunci #2: Atur posisi modal secara absolut terhadap layar */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Kunci #3: Trik untuk memusatkan elemen secara paksa */
+    transform: translate(-50%, -50%);
+
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    /* Lebar maksimal modal */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.instructions-list {
+    text-align: left;
+    display: inline-block;
+    /* Agar list tidak memenuhi lebar */
+    margin-bottom: 25px;
+}
+
+.instructions-list li {
+    padding: 5px 0;
+    color: #444;
+}
+
+#close-welcome-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #e85a4f;
+    /* Warna tema utama menu */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Tambahkan di menu.css */
+
+/* Jadikan header sebagai acuan posisi untuk tombol info */
+.menu-header {
+    position: relative;
+    padding-top: 40px;
+    /* Beri ruang agar tombol tidak menimpa logo */
+}
+
+/* Gaya untuk tombol info */
+#info-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #007bff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#info-button:hover {
+    background-color: #f0f2f5;
 }
