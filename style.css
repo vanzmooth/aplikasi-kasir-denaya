@@ -9,24 +9,34 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #eef1f5;
     color: #333;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+body.visible {
+    /* Kelas ini akan kita tambahkan via JavaScript untuk menampilkan halaman */
+    opacity: 1;
 }
 
 /* --- Layout Utama Aplikasi --- */
 .app-container {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Kolom kiri 2x lebih besar dari kanan */
+    grid-template-columns: 2fr 1fr;
+    /* Kolom kiri 2x lebih besar dari kanan */
     gap: 20px;
     padding: 20px;
     height: 100vh;
 }
 
 /* --- Penataan Setiap Kolom --- */
-.product-list-section, .cart-section {
+.product-list-section,
+.cart-section {
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 20px;
-    overflow-y: auto; /* Membuat konten bisa di-scroll jika terlalu panjang */
+    overflow-y: auto;
+    /* Membuat konten bisa di-scroll jika terlalu panjang */
 }
 
 h2 {
@@ -55,7 +65,7 @@ h2 {
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .product-card img {
@@ -121,7 +131,8 @@ h2 {
 /* --- Desain Responsif untuk Layar Kecil (Mobile) --- */
 @media (max-width: 768px) {
     .app-container {
-        grid-template-columns: 1fr; /* Ubah layout jadi 1 kolom */
+        grid-template-columns: 1fr;
+        /* Ubah layout jadi 1 kolom */
         height: auto;
     }
 }
@@ -132,20 +143,24 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    overflow-y: hidden; /* Sembunyikan scrollbar utama kolom kanan */
+    overflow-y: hidden;
+    /* Sembunyikan scrollbar utama kolom kanan */
 }
 
 .cart-section {
-    flex-shrink: 0; /* Mencegah bagian keranjang menyusut */
+    flex-shrink: 0;
+    /* Mencegah bagian keranjang menyusut */
 }
 
 .history-section {
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 20px;
-    overflow-y: auto; /* Buat bagian riwayat bisa di-scroll sendiri */
-    flex-grow: 1; /* Biarkan bagian ini mengisi sisa ruang */
+    overflow-y: auto;
+    /* Buat bagian riwayat bisa di-scroll sendiri */
+    flex-grow: 1;
+    /* Biarkan bagian ini mengisi sisa ruang */
 }
 
 .transaction-item {
@@ -184,13 +199,15 @@ h2 {
     height: 24px;
     border: 1px solid #ddd;
     background-color: #f1f1f1;
-    border-radius: 50%; /* Membuatnya bulat */
+    border-radius: 50%;
+    /* Membuatnya bulat */
     font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 2px; /* Penyesuaian posisi simbol */
+    padding-bottom: 2px;
+    /* Penyesuaian posisi simbol */
 }
 
 .btn-quantity:hover {
@@ -228,7 +245,8 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 /* --- Gaya untuk Panel Kontrol Transaksi --- */
 .transaction-item {
     display: grid;
-    grid-template-columns: 1fr auto auto; /* Info | Status | Aksi */
+    grid-template-columns: 1fr auto auto;
+    /* Info | Status | Aksi */
     align-items: center;
     gap: 15px;
 }
@@ -268,8 +286,14 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     text-align: center;
 }
 
-.status-preparing { background-color: #ffc107; color: #333; }
-.status-ready { background-color: #28a745; }
+.status-preparing {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.status-ready {
+    background-color: #28a745;
+}
 
 .tx-actions {
     display: flex;
@@ -315,45 +339,55 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     font-weight: bold;
     font-size: 1.2em;
 }
+
 /* Tambahkan di style.css */
 .tx-customer-name {
     font-weight: bold;
     font-size: 1.1em;
 }
+
 .tx-total {
     /* Ubah agar tidak bold, karena nama sekarang yang bold */
-    font-weight: normal; 
+    font-weight: normal;
 }
+
 /* Tambahkan di style.css */
 .validation-section {
-    background-color: #fff3cd; /* Warna kuning muda */
+    background-color: #fff3cd;
+    /* Warna kuning muda */
     border: 1px solid #ffeeba;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
+
 .validation-section h2 {
     margin-top: 0;
     font-size: 1.2em;
     color: #856404;
 }
+
 .validation-item {
     background-color: white;
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
+
 .validation-item p {
     margin: 0 0 8px 0;
 }
+
 .validation-name {
     font-weight: bold;
 }
+
 .validation-details {
     font-size: 0.9em;
     color: #555;
 }
+
 .validation-actions button {
     padding: 6px 10px;
     margin-right: 8px;
@@ -363,67 +397,84 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     font-weight: bold;
     color: white;
 }
+
 .btn-approve {
-    background-color: #28a745; /* Hijau */
+    background-color: #28a745;
+    /* Hijau */
 }
+
 .btn-reject {
-    background-color: #dc3545; /* Merah */
+    background-color: #dc3545;
+    /* Merah */
 }
+
 .info-text {
     color: #856404;
     text-align: center;
 }
 
 .status-badge.status-complete {
-    background-color: #6c757d; /* Abu-abu */
+    background-color: #6c757d;
+    /* Abu-abu */
     color: white;
 }
+
 /* Tambahkan di style.css */
 /* Membuat seluruh item riwayat bisa di-klik (kecuali tombol) */
 /* GANTI SEMUA GAYA LAMA DARI .transaction-item KE BAWAH DENGAN INI */
 .transaction-item {
-    display: flex; /* Kunci utama: menggunakan Flexbox */
+    display: flex;
+    /* Kunci utama: menggunakan Flexbox */
     gap: 20px;
     padding: 15px;
     border-bottom: 1px solid #eee;
 }
+
 .transaction-item:last-child {
     border-bottom: none;
 }
 
 .tx-main-info {
-    flex: 2; /* Biarkan kolom utama lebih besar */
+    flex: 2;
+    /* Biarkan kolom utama lebih besar */
     display: flex;
     flex-direction: column;
 }
+
 .tx-summary {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
+
 .tx-info {
     display: flex;
     align-items: center;
     gap: 15px;
 }
+
 .tx-queue {
     font-size: 1.5em;
     font-weight: bold;
     color: #007bff;
 }
+
 .tx-details {
     display: flex;
     flex-direction: column;
 }
+
 .tx-customer-name {
     font-weight: bold;
     font-size: 1.1em;
 }
+
 .tx-date {
     font-size: 0.8em;
     color: #6c757d;
     margin-top: 8px;
 }
+
 .tx-actions {
     margin-top: 12px;
     display: flex;
@@ -431,33 +482,57 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 }
 
 .tx-item-list-container {
-    flex: 1; /* Biarkan kolom rincian lebih kecil */
+    flex: 1;
+    /* Biarkan kolom rincian lebih kecil */
     background-color: #f8f9fa;
     padding: 10px;
     border-radius: 6px;
     font-size: 0.9em;
 }
+
 .tx-item-list-container p {
     margin-top: 0;
     margin-bottom: 8px;
     font-weight: bold;
 }
+
 .tx-item-list-container ul {
     margin: 0;
     padding-left: 18px;
 }
+
 .tx-item-list-container li {
     margin-bottom: 4px;
 }
 
 /* Penyesuaian untuk status badge, dll. */
-.status-badge { /* ... (Tidak berubah) ... */ }
-.status-preparing { /* ... (Tidak berubah) ... */ }
-.status-ready { /* ... (Tidak berubah) ... */ }
-.status-complete { /* ... (Tidak berubah) ... */ }
-.btn-action { /* ... (Tidak berubah) ... */ }
-.btn-action:hover { /* ... (Tidak berubah) ... */ }
-.btn-action:disabled { /* ... (Tidak berubah) ... */ }
+.status-badge {
+    /* ... (Tidak berubah) ... */
+}
+
+.status-preparing {
+    /* ... (Tidak berubah) ... */
+}
+
+.status-ready {
+    /* ... (Tidak berubah) ... */
+}
+
+.status-complete {
+    /* ... (Tidak berubah) ... */
+}
+
+.btn-action {
+    /* ... (Tidak berubah) ... */
+}
+
+.btn-action:hover {
+    /* ... (Tidak berubah) ... */
+}
+
+.btn-action:disabled {
+    /* ... (Tidak berubah) ... */
+}
 
 /* Tampilan di HP: Kolom kanan akan turun ke bawah */
 @media (max-width: 768px) {
@@ -479,7 +554,8 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     position: absolute;
     top: -10px;
     right: -10px;
-    background-color: #007bff; /* Warna biru */
+    background-color: #007bff;
+    /* Warna biru */
     color: white;
     width: 28px;
     height: 28px;
@@ -490,13 +566,14 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     font-weight: bold;
     font-size: 1em;
     border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
 
 /* Pastikan kartu produk bisa menampung badge */
 .product-card {
-    position: relative; /* Ini penting untuk positioning badge */
+    position: relative;
+    /* Ini penting untuk positioning badge */
     /* ... sisa gaya .product-card Anda ... */
 }
 
@@ -524,25 +601,30 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 .payment-switch {
     position: relative;
     display: flex;
-    background-color: #e9ecef; /* Warna latar belakang abu-abu */
+    background-color: #e9ecef;
+    /* Warna latar belakang abu-abu */
     border-radius: 20px;
     padding: 2px;
     border: 1px solid #ccc;
 }
 
 .payment-switch input[type="radio"] {
-    display: none; /* Sembunyikan radio button asli */
+    display: none;
+    /* Sembunyikan radio button asli */
 }
 
 .payment-switch label {
     padding: 6px 15px;
     border-radius: 20px;
     cursor: pointer;
-    z-index: 2; /* Pastikan label di atas slider */
+    z-index: 2;
+    /* Pastikan label di atas slider */
     transition: color 0.3s ease-in-out;
     font-size: 0.85em;
-    color: #555; /* Warna teks default */
-    user-select: none; /* Agar teks tidak bisa di-select */
+    color: #555;
+    /* Warna teks default */
+    user-select: none;
+    /* Agar teks tidak bisa di-select */
 }
 
 /* Elemen slider yang bergerak */
@@ -554,25 +636,67 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     left: 0;
     background-color: white;
     border-radius: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease-in-out;
-    z-index: 1; /* Posisikan slider di belakang label */
+    z-index: 1;
+    /* Posisikan slider di belakang label */
 }
 
 /* Saat radio 'manual' dipilih */
-.payment-switch input#mode-manual:checked ~ .slider {
+.payment-switch input#mode-manual:checked~.slider {
     transform: translateX(0%);
 }
-.payment-switch input#mode-manual:checked + label {
-    color: #007bff; /* Warna teks aktif */
+
+.payment-switch input#mode-manual:checked+label {
+    color: #007bff;
+    /* Warna teks aktif */
     font-weight: bold;
 }
 
 /* Saat radio 'otomatis' dipilih */
-.payment-switch input#mode-otomatis:checked ~ .slider {
+.payment-switch input#mode-otomatis:checked~.slider {
     transform: translateX(100%);
 }
-.payment-switch input#mode-otomatis:checked + label {
-    color: #007bff; /* Warna teks aktif */
+
+.payment-switch input#mode-otomatis:checked+label {
+    color: #007bff;
+    /* Warna teks aktif */
     font-weight: bold;
+}
+
+/* Tambahkan di style.css, laporan.css, stok.css */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.logout-btn {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #dc3545;
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Pastikan aturan ini ada di style.css */
+.hidden {
+    display: none;
 }

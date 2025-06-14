@@ -12,7 +12,7 @@ body {
     background-color: white;
     padding: 30px 40px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 350px;
     text-align: center;
@@ -61,7 +61,29 @@ h2 {
 }
 
 .error-text {
-    color: #dc3545; /* Merah */
+    color: #dc3545;
+    /* Merah */
     margin-top: 15px;
-    height: 20px; /* Beri ruang agar layout tidak bergeser */
+    height: 20px;
+    /* Beri ruang agar layout tidak bergeser */
+}
+
+/* Tambahkan di bagian akhir login.css */
+
+.reset-password-area {
+    margin-top: 20px;
+    /* Memberi jarak dari pesan error di atasnya */
+    font-size: 0.9em;
+}
+
+#reset-password-link {
+    color: #007bff;
+    /* Warna biru standar untuk link */
+    text-decoration: none;
+    /* Hilangkan garis bawah default */
+}
+
+#reset-password-link:hover {
+    text-decoration: underline;
+    /* Munculkan garis bawah saat kursor mouse menyentuhnya */
 }

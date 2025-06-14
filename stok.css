@@ -3,12 +3,21 @@ body {
     background-color: #f0f2f5;
     margin: 0;
     color: #333;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
+
+body.visible {
+    /* Kelas ini akan kita tambahkan via JavaScript untuk menampilkan halaman */
+    opacity: 1;
+}
+
 .main-container {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
 }
+
 header {
     display: flex;
     justify-content: space-between;
@@ -17,9 +26,22 @@ header {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
-header h1 { margin: 0; }
-.back-link { text-decoration: none; color: #007bff; font-weight: bold; }
-.loading-text { color: #888; text-align: center; padding: 20px; }
+
+header h1 {
+    margin: 0;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.loading-text {
+    color: #888;
+    text-align: center;
+    padding: 20px;
+}
 
 .stock-item {
     display: flex;
@@ -27,22 +49,26 @@ header h1 { margin: 0; }
     background-color: white;
     padding: 15px 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     margin-bottom: 15px;
 }
+
 .stock-info {
     flex-grow: 1;
 }
+
 .stock-name {
     font-weight: bold;
     font-size: 1.2em;
     text-transform: capitalize;
 }
+
 .stock-quantity {
     font-size: 1.5em;
     font-weight: 700;
     color: #007bff;
 }
+
 .stock-actions button {
     padding: 8px 12px;
     margin-left: 10px;
@@ -53,16 +79,27 @@ header h1 { margin: 0; }
     font-weight: bold;
     min-width: 40px;
 }
+
 .btn-add {
     color: #28a745;
     border-color: #28a745;
 }
+
 .btn-adjust {
     color: #ffc107;
     border-color: #ffc107;
 }
-.btn-add:hover { background-color: #28a745; color: white; }
-.btn-adjust:hover { background-color: #ffc107; color: black; }
+
+.btn-add:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-adjust:hover {
+    background-color: #ffc107;
+    color: black;
+}
+
 /* Tambahkan di stok.css */
 .history-section {
     margin-top: 30px;
@@ -72,8 +109,9 @@ header h1 { margin: 0; }
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    overflow-x: auto; /* Agar bisa di-scroll horizontal jika di layar kecil */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+    /* Agar bisa di-scroll horizontal jika di layar kecil */
 }
 
 table {
@@ -81,7 +119,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
@@ -106,9 +145,105 @@ tbody tr:hover {
 }
 
 .stock-in {
-    background-color: #28a745; /* Hijau untuk stok masuk */
+    background-color: #28a745;
+    /* Hijau untuk stok masuk */
 }
 
 .stock-out {
-    background-color: #dc3545; /* Merah untuk stok keluar */
+    background-color: #dc3545;
+    /* Merah untuk stok keluar */
+}
+
+/* Tambahkan di style.css, laporan.css, stok.css */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.logout-btn {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #dc3545;
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Tambahkan di stok.css */
+.add-product-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.add-product-section h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-submit {
+    grid-column: 1 / -1;
+    /* Buat tombol memakai lebar penuh */
+    margin-top: 10px;
+}
+
+#save-product-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#save-product-btn:hover {
+    background-color: #0056b3;
 }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Aplikasi Kasir</title>
     <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
     <div class="login-container">
         <h2>Login Kasir</h2>
@@ -19,10 +21,14 @@
         </div>
         <button id="login-button">Login</button>
         <p id="error-message" class="error-text"></p>
+        <p class="reset-password-area">
+            <a href="#" id="reset-password-link">Lupa Password?</a>
+        </p>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
     <script src="login.js"></script>
 </body>
+
 </html>

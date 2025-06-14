@@ -4,12 +4,12 @@
 
 // PENTING: Salin konfigurasi Firebase Anda dari app.js ke sini
 const firebaseConfig = {
-  apiKey: "AIzaSyD0Qh1Fimh9iYT8dOi91beIbc1wDe80R0g",
-  authDomain: "aplikasikasirpwa.firebaseapp.com",
-  projectId: "aplikasikasirpwa",
-  storageBucket: "aplikasikasirpwa.firebasestorage.app",
-  messagingSenderId: "820452190086",
-  appId: "1:820452190086:web:695af51a9d5ac707e22e07"
+    apiKey: "AIzaSyD0Qh1Fimh9iYT8dOi91beIbc1wDe80R0g",
+    authDomain: "aplikasikasirpwa.firebaseapp.com",
+    projectId: "aplikasikasirpwa",
+    storageBucket: "aplikasikasirpwa.firebasestorage.app",
+    messagingSenderId: "820452190086",
+    appId: "1:820452190086:web:695af51a9d5ac707e22e07"
 };
 
 // Inisialisasi Firebase
@@ -101,17 +101,17 @@ async function generateReport(startDate, endDate) {
         snapshot.docs.forEach(doc => {
             const tx = doc.data();
             // --- TAMBAHKAN BLOK CONSOLE.LOG UNTUK DEBUGGING DI SINI ---
-    // console.log(`--- Memproses Transaksi ID: ${doc.id} ---`);
-    // console.log(`Nilai totalAmount dari Firestore: ${tx.totalAmount}`);
-    // console.log(`Tipe data dari totalAmount: ${typeof tx.totalAmount}`);
-    // console.log(`Total pendapatan SEBELUM ditambah: ${totalRevenue}`);
-    
-    // Proses penjumlahan
-    totalRevenue += tx.totalAmount;
-    
-    // console.log(`Total pendapatan SETELAH ditambah: ${totalRevenue}`);
-    // console.log(`------------------------------------`);
-    // --- AKHIR BLOK DEBUGGING ---
+            // console.log(`--- Memproses Transaksi ID: ${doc.id} ---`);
+            // console.log(`Nilai totalAmount dari Firestore: ${tx.totalAmount}`);
+            // console.log(`Tipe data dari totalAmount: ${typeof tx.totalAmount}`);
+            // console.log(`Total pendapatan SEBELUM ditambah: ${totalRevenue}`);
+
+            // Proses penjumlahan
+            totalRevenue += tx.totalAmount;
+
+            // console.log(`Total pendapatan SETELAH ditambah: ${totalRevenue}`);
+            // console.log(`------------------------------------`);
+            // --- AKHIR BLOK DEBUGGING ---
 
             tx.items.forEach(item => {
                 if (productSales[item.name]) {
@@ -137,8 +137,8 @@ async function generateReport(startDate, endDate) {
         renderSalesChart(productSales);
         totalTransactionsEl.textContent = totalTransactions;
         bestSellingProductEl.textContent = `${bestSellingProduct} (${maxQuantity} terjual)`;
-      // PANGGIL FUNGSI GRAFIK DI SINI
-renderSalesChart(productSales);
+        // PANGGIL FUNGSI GRAFIK DI SINI
+        renderSalesChart(productSales);
 
         // Tampilkan rincian penjualan produk
         productSalesListEl.innerHTML = '';
@@ -163,7 +163,7 @@ renderSalesChart(productSales);
 
 function exportToCsv(transactions) {
     const headers = ['ID Transaksi', 'Tanggal', 'Nama Pelanggan', 'Nomor Antrian', 'Nama Produk', 'Kuantitas', 'Harga Satuan', 'Subtotal'];
-    
+
     // Fungsi kecil untuk memastikan tidak ada koma yang merusak CSV
     const escapeCsvCell = (cell) => {
         if (cell === undefined || cell === null) return '';
@@ -203,10 +203,10 @@ function downloadCsv(csvContent) {
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    
+
     const date = new Date().toISOString().slice(0, 10);
     link.setAttribute("download", `laporan-penjualan-${date}.csv`);
-    
+
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -330,8 +330,10 @@ applyRangeBtn.addEventListener('click', () => {
 // =======================================================
 auth.onAuthStateChanged(user => {
     if (user) {
+        // TAMPILKAN HALAMAN
+        document.body.classList.add('visible');
         console.log("Pengguna sudah login, laporan dapat diakses.");
-                // --- TAMBAHKAN KODE INI UNTUK MEMICU LAPORAN DEFAULT ---
+        // --- TAMBAHKAN KODE INI UNTUK MEMICU LAPORAN DEFAULT ---
         // Kita cari tombol "Hari Ini" lalu kita panggil .click() padanya.
         const todayButton = document.querySelector('.filter-btn[data-period="today"]');
         if (todayButton) {
@@ -342,6 +344,19 @@ auth.onAuthStateChanged(user => {
     } else {
         console.log("Tidak ada pengguna yang login, mengarahkan ke halaman login...");
         window.location.href = 'login.html';
+    }
+
+    // Tambahkan di app.js, laporan.js, dan stok.js
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                console.log('Pengguna berhasil logout.');
+                // Halaman akan otomatis redirect karena ada "penjaga" onAuthStateChanged
+            }).catch((error) => {
+                console.error('Error saat logout:', error);
+            });
+        });
     }
 });
 
