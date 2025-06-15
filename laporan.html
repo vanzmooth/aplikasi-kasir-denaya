@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Penjualan</title>
     <link rel="stylesheet" href="laporan.css">
 </head>
+
 <body>
     <div class="report-container">
         <header>
             <h1>Laporan Penjualan</h1>
             <a href="index.html" class="back-link">Kembali ke Kasir</a>
+            <button id="logout-button" class="logout-btn">Logout</button>
         </header>
 
         <section class="filter-section">
@@ -22,19 +25,19 @@
                 <button id="export-csv-button" class="export-btn">Export ke CSV</button>
             </div>
             <div class="custom-date-range">
-        <div class="date-input-group">
-            <label for="start-date">Dari Tanggal:</label>
-            <input type="date" id="start-date">
-        </div>
-        <div class="date-input-group">
-            <label for="end-date">Sampai Tanggal:</label>
-            <input type="date" id="end-date">
-        </div>
-        <button id="apply-range-btn" class="apply-btn">Terapkan</button>
-    </div>
+                <div class="date-input-group">
+                    <label for="start-date">Dari Tanggal:</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="date-input-group">
+                    <label for="end-date">Sampai Tanggal:</label>
+                    <input type="date" id="end-date">
+                </div>
+                <button id="apply-range-btn" class="apply-btn">Terapkan</button>
+            </div>
         </section>
 
-        
+
         <section id="summary-section" class="summary-cards">
             <div class="card">
                 <h3>Total Pendapatan</h3>
@@ -50,11 +53,11 @@
             </div>
         </section>
         <section class="chart-section">
-    <h2>Grafik Penjualan</h2>
-    <div class="chart-container">
-        <canvas id="salesChart"></canvas>
-    </div>
-</section>
+            <h2>Grafik Penjualan</h2>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </section>
 
         <section class="detail-section">
             <h2>Rincian Penjualan Produk</h2>
@@ -71,4 +74,5 @@
 
     <script src="laporan.js"></script>
 </body>
+
 </html>
