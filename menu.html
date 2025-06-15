@@ -10,10 +10,12 @@
 
 <body>
     <div class="app-container">
+
         <section class="product-list-section">
             <header class="menu-header">
                 <button id="info-button" title="Cara Pesan">&#8505;</button>
-                <img src="https://i.imgur.com/your-logo.png" alt="Logo" class="logo">
+                <img src="https://drive.google.com/thumbnail?id=13ZyIxl07iK1rjbFAduWf4Rnz2osjnCN2" alt="Logo"
+                    class="logo">
                 <h1>Pilih Jajanan Favoritmu!</h1>
             </header>
             <div id="product-list" class="grid-container">
@@ -36,37 +38,54 @@
             </div>
             <button id="checkout-button" class="checkout-button">Pesan & Bayar Sekarang</button>
         </aside>
+
     </div>
+
 
     <div id="payment-overlay" class="overlay-container hidden">
         <div class="payment-modal">
             <h2>Konfirmasi Pembayaran</h2>
-            <p class="instruction-text">Pindai QRIS di bawah ini, lalu masukkan nominal pembayaran sesuai <strong>TOTAL
-                    UNIK</strong> yang tertera.</p>
-            <div class="total-section-overlay">
-                <div class="total-item"><span>Total Belanja</span><span id="original-total-amount">Rp 0</span></div>
-                <div class="total-item"><span>Kode Unik Verifikasi</span><span id="unique-code"
-                        class="unique-code-text">+ Rp 0</span></div>
-                <hr class="total-hr">
-                <div class="total-item final-total"><span>TOTAL BAYAR UNIK</span><span id="final-unique-total">Rp
-                        0</span></div>
+            <p class="instruction-text">
+                Pindai QRIS di bawah ini, lalu masukkan nominal pembayaran
+                sesuai <strong>TOTAL UNIK</strong> yang tertera.
+            </p>
+
+            <div class="total-section">
+                <div class="total-item-vertical">
+                    <span class="total-label">Total Belanja</span>
+                    <span id="original-total-amount" class="total-value">Rp 0</span>
+                </div>
+                <div class="total-item-vertical">
+                    <span class="total-label">Kode Unik Verifikasi</span>
+                    <span id="unique-code" class="total-value unique-code-text">+ Rp 0</span>
+                </div>
+                <div class="total-item-vertical final-total-vertical">
+                    <span class="total-label">TOTAL UNIK ANDA</span>
+                    <span id="final-unique-total" class="total-value final-total-value">Rp 0</span>
+                </div>
             </div>
-            <img src="https://i.imgur.com/your-qris.png" alt="QRIS" class="qris-image"> <button
-                id="confirm-payment-button">Saya Sudah Bayar</button>
+
+            <img src="https://i.imgur.com/adoL9cu.jpeg" alt="QRIS" class="qris-image">
+
+            <button id="confirm-payment-button">Saya Sudah Bayar</button>
             <button id="cancel-payment-button" class="cancel-btn">Batalkan</button>
-            <p class="important-note">Setelah membayar, harap tunjukkan layar ini ke kasir untuk validasi.</p>
+
+            <p class="important-note">
+                Setelah membayar, <strong>harap tetap di halaman ini & tunjukkan ke kasir</strong> untuk persetujuan
+                pesanan.
+            </p>
         </div>
     </div>
 
-    <div id="welcome-overlay" class="overlay-container hidden">
+    <div id="welcome-overlay" class="overlay-container">
         <div class="welcome-modal">
             <h2>Selamat Datang di Jajanan Denaya!</h2>
             <p>Pesan jajanan favoritmu dengan mudah:</p>
             <ol class="instructions-list">
-                <li>Pilih menu yang Anda inginkan (bisa tekan lama untuk menambah 5).</li>
-                <li>Atur jumlah pesanan di keranjang di sebelah kanan.</li>
+                <li>Pilih menu yang Anda inginkan.</li>
+                <li>Sentuh pada gambar menu untuk menambah pesanan sesuai jumlah yang di inginkan.</li>
                 <li>Isi nama Anda, lalu klik "Pesan & Bayar".</li>
-                <li>Selesaikan pembayaran dan tunggu nomor antrian Anda dipanggil.</li>
+                <li>Selesaikan pembayaran dan tunjukkan status pesanan Anda ke kasir saat pesanan akan di ambil.</li>
             </ol>
             <button id="close-welcome-btn">Saya Mengerti</button>
         </div>
@@ -75,9 +94,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-functions-compat.js"></script>
-    <script type="text/javascript" src="https://app.midtrans.com/snap/snap.js"
-        data-client-key="GANTI_DENGAN_CLIENT_KEY_PRODUKSI_ANDA"></script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="SB-Mid-client-x4pNw1UvoyxVy9ud"></script>
+
     <script src="menu.js"></script>
+
 </body>
 
 </html>
