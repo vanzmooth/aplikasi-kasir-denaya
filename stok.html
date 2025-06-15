@@ -4,54 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Stok</title>
+    <title>Manajemen Stok & Menu</title>
     <link rel="stylesheet" href="stok.css">
 </head>
 
 <body>
     <div class="main-container">
         <header>
-            <h1>Manajemen Stok</h1>
-            <a href="index.html" class="back-link">Kembali ke Kasir</a>
-            <button id="logout-button" class="logout-btn">Logout</button>
+            <h1>Manajemen Stok & Menu</h1>
+            <div class="header-nav">
+                <a href="index.html" class="nav-btn">Kembali ke Kasir</a>
+                <button id="logout-button" class="logout-btn">Logout</button>
+            </div>
         </header>
 
         <section class="add-product-section">
             <h2>Tambah Menu Baru</h2>
             <form id="add-product-form" class="form-grid">
-                <div class="form-group">
-                    <label for="product-name">Nama Menu</label>
-                    <input type="text" id="product-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-price">Harga (Rp)</label>
-                    <input type="number" id="product-price" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-image">URL Gambar</label>
-                    <input type="url" id="product-image" placeholder="https://i.imgur.com/...">
-                </div>
-                <div class="form-group">
-                    <label for="product-stock-id">Kategori Stok</label>
-                    <select id="product-stock-id" required>
+                <div class="form-group"><label for="product-name">Nama Menu</label><input type="text" id="product-name"
+                        required></div>
+                <div class="form-group"><label for="product-price">Harga (Rp)</label><input type="number"
+                        id="product-price" required></div>
+                <div class="form-group"><label for="product-image">URL Gambar</label><input type="url"
+                        id="product-image" placeholder="https://i.imgur.com/..."></div>
+                <div class="form-group"><label for="product-stock-id">Kategori Stok</label><select id="product-stock-id"
+                        required>
                         <option value="">-- Pilih Kategori --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="product-min-order">Min. Order (Opsional)</label>
-                    <input type="number" id="product-min-order" min="1" placeholder="Kosongkan jika 1">
-                </div>
-                <div class="form-group form-submit">
-                    <button type="submit" id="save-product-btn">Simpan Menu</button>
+                    </select></div>
+                <div class="form-group"><label for="product-min-order">Min. Order (Opsional)</label><input type="number"
+                        id="product-min-order" min="1" placeholder="Kosongkan jika 1"></div>
+                <div class="form-group form-submit"><button type="submit" id="save-product-btn">Simpan Menu</button>
                 </div>
             </form>
         </section>
 
-        <main id="stock-list-container">
-            <p class="loading-text">Memuat data stok...</p>
-        </main>
-        <main id="stock-list-container">
-        </main>
+        <section class="product-list-management">
+            <h2>Daftar Menu Saat Ini</h2>
+            <div id="product-list-admin">
+                <p class="loading-text">Memuat daftar menu...</p>
+            </div>
+        </section>
+
+        <section class="stock-management-section">
+            <h2>Manajemen Kategori Stok</h2>
+            <div id="stock-list-container">
+                <p class="loading-text">Memuat data stok...</p>
+            </div>
+        </section>
 
         <section class="history-section">
             <h2>Riwayat Pergerakan Stok</h2>
@@ -65,13 +64,32 @@
                             <th>Alasan</th>
                         </tr>
                     </thead>
-                    <tbody id="stock-history-body">
-                    </tbody>
+                    <tbody id="stock-history-body"></tbody>
                 </table>
             </div>
         </section>
     </div>
 
+    <div id="edit-product-overlay" class="overlay-container hidden">
+        <div class="edit-modal">
+            <h2>Edit Menu</h2>
+            <form id="edit-product-form">
+                <input type="hidden" id="edit-product-id">
+                <div class="form-group"><label for="edit-product-name">Nama Menu</label><input type="text"
+                        id="edit-product-name" required></div>
+                <div class="form-group"><label for="edit-product-price">Harga (Rp)</label><input type="number"
+                        id="edit-product-price" required></div>
+                <div class="form-group"><label for="edit-product-image">URL Gambar</label><input type="url"
+                        id="edit-product-image"></div>
+                <div class="form-group"><label for="edit-product-stock-id">Kategori Stok</label><select
+                        id="edit-product-stock-id" required></select></div>
+                <div class="form-group"><label for="edit-product-min-order">Min. Order</label><input type="number"
+                        id="edit-product-min-order" min="1"></div>
+                <div class="form-actions"><button type="button" id="cancel-edit-btn">Batal</button><button type="submit"
+                        id="save-changes-btn">Simpan Perubahan</button></div>
+            </form>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>

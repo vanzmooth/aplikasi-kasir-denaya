@@ -8,12 +8,11 @@ body {
 }
 
 body.visible {
-    /* Kelas ini akan kita tambahkan via JavaScript untuk menampilkan halaman */
     opacity: 1;
 }
 
 .main-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 20px auto;
     padding: 20px;
 }
@@ -31,10 +30,34 @@ header h1 {
     margin: 0;
 }
 
-.back-link {
+.header-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn,
+.logout-btn {
     text-decoration: none;
-    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.logout-btn {
+    color: #dc3545;
+    background-color: transparent;
+    border: 1px solid #dc3545;
+}
+
+.logout-btn:hover {
+    background-color: #dc3545;
+    color: white;
 }
 
 .loading-text {
@@ -43,151 +66,10 @@ header h1 {
     padding: 20px;
 }
 
-.stock-item {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    margin-bottom: 15px;
-}
-
-.stock-info {
-    flex-grow: 1;
-}
-
-.stock-name {
-    font-weight: bold;
-    font-size: 1.2em;
-    text-transform: capitalize;
-}
-
-.stock-quantity {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #007bff;
-}
-
-.stock-actions button {
-    padding: 8px 12px;
-    margin-left: 10px;
-    border: 1px solid #ccc;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    min-width: 40px;
-}
-
-.btn-add {
-    color: #28a745;
-    border-color: #28a745;
-}
-
-.btn-adjust {
-    color: #ffc107;
-    border-color: #ffc107;
-}
-
-.btn-add:hover {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-adjust:hover {
-    background-color: #ffc107;
-    color: black;
-}
-
-/* Tambahkan di stok.css */
+.add-product-section,
+.product-list-management,
+.stock-management-section,
 .history-section {
-    margin-top: 30px;
-}
-
-.table-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    overflow-x: auto;
-    /* Agar bisa di-scroll horizontal jika di layar kecil */
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-thead th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-
-tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Gaya untuk perubahan stok */
-.stock-change {
-    font-weight: bold;
-    text-align: center;
-    border-radius: 5px;
-    padding: 2px 6px;
-    color: white;
-}
-
-.stock-in {
-    background-color: #28a745;
-    /* Hijau untuk stok masuk */
-}
-
-.stock-out {
-    background-color: #dc3545;
-    /* Merah untuk stok keluar */
-}
-
-/* Tambahkan di style.css, laporan.css, stok.css */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.nav-btn {
-    text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    margin-right: 10px;
-}
-
-.logout-btn {
-    padding: 10px 15px;
-    font-weight: bold;
-    color: #dc3545;
-    background-color: transparent;
-    border: 1px solid #dc3545;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.logout-btn:hover {
-    background-color: #dc3545;
-    color: white;
-}
-
-/* Tambahkan di stok.css */
-.add-product-section {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -195,7 +77,7 @@ tbody tr:hover {
     margin-bottom: 20px;
 }
 
-.add-product-section h2 {
+h2 {
     margin-top: 0;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
@@ -228,7 +110,6 @@ tbody tr:hover {
 
 .form-submit {
     grid-column: 1 / -1;
-    /* Buat tombol memakai lebar penuh */
     margin-top: 10px;
 }
 
@@ -246,4 +127,199 @@ tbody tr:hover {
 
 #save-product-btn:hover {
     background-color: #0056b3;
+}
+
+.product-list-item {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 15px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product-list-item:last-child {
+    border-bottom: none;
+}
+
+.product-list-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.product-list-info .name {
+    font-weight: bold;
+}
+
+.product-list-info .details {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.btn-edit {
+    padding: 6px 12px;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.stock-item {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.stock-info {
+    flex-grow: 1;
+}
+
+.stock-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform: capitalize;
+}
+
+.stock-quantity {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.stock-actions button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 40px;
+}
+
+.btn-add {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-adjust {
+    color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-add:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-adjust:hover {
+    background-color: #ffc107;
+    color: black;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.stock-change {
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    padding: 2px 6px;
+    color: white;
+}
+
+.stock-in {
+    background-color: #28a745;
+}
+
+.stock-out {
+    background-color: #dc3545;
+}
+
+.overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.overlay-container.hidden {
+    display: none !important;
+}
+
+.edit-modal {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.edit-modal h2 {
+    margin-top: 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#save-changes-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#cancel-edit-btn {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
 }
