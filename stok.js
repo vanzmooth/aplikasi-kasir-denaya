@@ -1,11 +1,11 @@
 // PENTING: Salin konfigurasi Firebase Anda dari file lain ke sini
 const firebaseConfig = {
-    apiKey: "AIzaSyD0Qh1Fimh9iYT8dOi91beIbc1wDe80R0g",
-    authDomain: "aplikasikasirpwa.firebaseapp.com",
-    projectId: "aplikasikasirpwa",
-    storageBucket: "aplikasikasirpwa.firebasestorage.app",
-    messagingSenderId: "820452190086",
-    appId: "1:820452190086:web:695af51a9d5ac707e22e07"
+  apiKey: "AIzaSyD0Qh1Fimh9iYT8dOi91beIbc1wDe80R0g",
+  authDomain: "aplikasikasirpwa.firebaseapp.com",
+  projectId: "aplikasikasirpwa",
+  storageBucket: "aplikasikasirpwa.firebasestorage.app",
+  messagingSenderId: "820452190086",
+  appId: "1:820452190086:web:695af51a9d5ac707e22e07"
 };
 
 // Inisialisasi Firebase
@@ -15,35 +15,19 @@ const auth = firebase.auth();
 
 // Menghubungkan variabel dengan elemen di HTML
 const stockListContainer = document.getElementById('stock-list-container');
-const addProductForm = document.getElementById('add-product-form');
+
 // =======================================================
 // PENJAGA OTENTIKASI HALAMAN
 // =======================================================
 auth.onAuthStateChanged(user => {
     if (user) {
-        // TAMPILKAN HALAMAN
-        document.body.classList.add('visible');
         console.log("Pengguna sudah login, menampilkan manajemen stok.");
         // Jika sudah login, baru jalankan fungsi utama
         listenForStockUpdates();
         listenForStockHistory();
-        populateStockIdDropdown();
     } else {
         console.log("Tidak ada pengguna yang login, mengarahkan ke halaman login...");
         window.location.href = 'login.html';
-    }
-
-    // Tambahkan di app.js, laporan.js, dan stok.js
-    const logoutButton = document.getElementById('logout-button');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                console.log('Pengguna berhasil logout.');
-                // Halaman akan otomatis redirect karena ada "penjaga" onAuthStateChanged
-            }).catch((error) => {
-                console.error('Error saat logout:', error);
-            });
-        });
     }
 });
 
@@ -125,97 +109,7 @@ function listenForStockHistory() {
             historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Gagal memuat riwayat.</td></tr>';
         });
 }
-// Tambahkan DUA blok kode baru ini di stok.js
 
-// 1. Fungsi untuk menangani penambahan kategori stok baru
-async function handleAddNewStockCategory() {
-    const stockIdSelect = document.getElementById('product-stock-id');
-    const newCategoryName = prompt("Masukkan nama untuk kategori stok baru (misal: Minuman Dingin):");
-
-    if (!newCategoryName || newCategoryName.trim() === '') {
-        alert("Nama kategori tidak boleh kosong.");
-        stockIdSelect.value = ""; // Kembalikan ke pilihan default
-        return;
-    }
-
-    const initialStockStr = prompt(`Masukkan jumlah stok awal untuk "${newCategoryName}":`);
-    const initialStock = parseInt(initialStockStr);
-
-    if (isNaN(initialStock) || initialStock < 0) {
-        alert("Harap masukkan jumlah stok yang valid (angka positif).");
-        stockIdSelect.value = "";
-        return;
-    }
-
-    // Buat field key yang valid untuk Firestore (huruf kecil, spasi jadi _)
-    const newStockId = `stok_${newCategoryName.trim().toLowerCase().replace(/\s+/g, '_')}`;
-
-    try {
-        // Update dokumen stock_tracker dengan field baru
-        const stockRef = db.collection('counters').doc('stock_tracker');
-        await stockRef.update({
-            [newStockId]: initialStock
-        });
-
-        alert(`Kategori stok "${newCategoryName}" berhasil dibuat!`);
-
-        // Muat ulang dropdown dan pilih kategori yang baru dibuat
-        await populateStockIdDropdown();
-        stockIdSelect.value = newStockId;
-
-    } catch (error) {
-        console.error("Gagal membuat kategori stok baru:", error);
-        alert(`Gagal: ${error.message}`);
-        stockIdSelect.value = "";
-    }
-}
-
-// 2. Event listener untuk dropdown kategori stok
-document.addEventListener('DOMContentLoaded', () => {
-    // ... (listener untuk addProductForm dan stockListEl yang sudah ada) ...
-
-    const stockIdSelect = document.getElementById('product-stock-id');
-    if (stockIdSelect) {
-        stockIdSelect.addEventListener('change', (event) => {
-            if (event.target.value === '--add_new--') {
-                handleAddNewStockCategory();
-            }
-        });
-    }
-});
-// Tambahkan fungsi baru ini di stok.js
-// Ganti fungsi ini di stok.js
-async function populateStockIdDropdown() {
-    const stockIdSelect = document.getElementById('product-stock-id');
-    // Simpan opsi pertama ("-- Pilih Kategori --")
-    const firstOption = stockIdSelect.options[0];
-    stockIdSelect.innerHTML = ''; // Kosongkan dropdown
-    stockIdSelect.appendChild(firstOption); // Tambahkan kembali opsi pertama
-
-    try {
-        const doc = await db.collection('counters').doc('stock_tracker').get();
-        if (doc.exists) {
-            const stockData = doc.data();
-            for (const stockId in stockData) {
-                if (!stockId.includes('Date')) { // Filter field non-stok
-                    const option = document.createElement('option');
-                    option.value = stockId;
-                    option.textContent = stockId.replace(/_/g, ' ');
-                    stockIdSelect.appendChild(option);
-                }
-            }
-        }
-    } catch (error) {
-        console.error("Gagal mengisi dropdown stok:", error);
-    } finally {
-        // --- TAMBAHAN BARU DI SINI ---
-        // Selalu tambahkan opsi untuk membuat kategori baru di akhir
-        const addNewOption = document.createElement('option');
-        addNewOption.value = '--add_new--'; // Beri nilai unik
-        addNewOption.textContent = '++ Tambah Kategori Baru ++';
-        stockIdSelect.appendChild(addNewOption);
-    }
-}
 // Event listener untuk tombol-tombol aksi
 stockListContainer.addEventListener('click', async (event) => {
     const target = event.target;
@@ -243,7 +137,7 @@ stockListContainer.addEventListener('click', async (event) => {
         alert("Harap masukkan jumlah yang valid.");
         return;
     }
-
+    
     // Proses update menggunakan batch write
     try {
         target.disabled = true; // Nonaktifkan tombol saat proses
@@ -271,42 +165,5 @@ stockListContainer.addEventListener('click', async (event) => {
         alert(`Gagal memperbarui stok: ${error.message}`);
     } finally {
         target.disabled = false; // Aktifkan kembali tombolnya
-    }
-});
-// Tambahkan listener baru ini di stok.js
-addProductForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Mencegah form melakukan refresh halaman
-    const saveButton = document.getElementById('save-product-btn');
-    saveButton.disabled = true;
-    saveButton.textContent = 'Menyimpan...';
-
-    try {
-        // Ambil semua nilai dari form
-        const name = document.getElementById('product-name').value;
-        const price = parseInt(document.getElementById('product-price').value);
-        const image = document.getElementById('product-image').value;
-        const stock_id = document.getElementById('product-stock-id').value;
-        const min_order = parseInt(document.getElementById('product-min-order').value) || 1;
-
-        if (!name || !price || !stock_id) {
-            throw new Error('Nama, Harga, dan Kategori Stok wajib diisi.');
-        }
-
-        // Siapkan objek produk baru
-        const newProduct = { name, price, stock_id, min_order };
-        if (image) newProduct.image = image; // Hanya tambahkan image jika diisi
-
-        // Simpan ke koleksi 'products'
-        await db.collection('products').add(newProduct);
-
-        alert(`Menu "${name}" berhasil ditambahkan!`);
-        addProductForm.reset(); // Kosongkan form
-
-    } catch (error) {
-        console.error("Gagal menambah menu:", error);
-        alert(`Gagal menambah menu: ${error.message}`);
-    } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = 'Simpan Menu';
     }
 });

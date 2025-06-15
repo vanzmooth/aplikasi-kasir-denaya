@@ -1,57 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Stok</title>
     <link rel="stylesheet" href="stok.css">
 </head>
-
 <body>
     <div class="main-container">
         <header>
             <h1>Manajemen Stok</h1>
             <a href="index.html" class="back-link">Kembali ke Kasir</a>
-            <button id="logout-button" class="logout-btn">Logout</button>
         </header>
-
-        <section class="add-product-section">
-            <h2>Tambah Menu Baru</h2>
-            <form id="add-product-form" class="form-grid">
-                <div class="form-group">
-                    <label for="product-name">Nama Menu</label>
-                    <input type="text" id="product-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-price">Harga (Rp)</label>
-                    <input type="number" id="product-price" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-image">URL Gambar</label>
-                    <input type="url" id="product-image" placeholder="https://i.imgur.com/...">
-                </div>
-                <div class="form-group">
-                    <label for="product-stock-id">Kategori Stok</label>
-                    <select id="product-stock-id" required>
-                        <option value="">-- Pilih Kategori --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="product-min-order">Min. Order (Opsional)</label>
-                    <input type="number" id="product-min-order" min="1" placeholder="Kosongkan jika 1">
-                </div>
-                <div class="form-group form-submit">
-                    <button type="submit" id="save-product-btn">Simpan Menu</button>
-                </div>
-            </form>
-        </section>
 
         <main id="stock-list-container">
             <p class="loading-text">Memuat data stok...</p>
         </main>
         <main id="stock-list-container">
-        </main>
+            </main>
 
         <section class="history-section">
             <h2>Riwayat Pergerakan Stok</h2>
@@ -66,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody id="stock-history-body">
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
@@ -78,5 +44,4 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
     <script src="stok.js"></script>
 </body>
-
 </html>

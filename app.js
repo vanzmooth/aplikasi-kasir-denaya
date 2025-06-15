@@ -30,7 +30,6 @@ const validationListEl = document.getElementById('validation-list');
 const transactionListEl = document.getElementById('transaction-list');
 const modeManualRadio = document.getElementById('mode-manual');
 const modeOtomatisRadio = document.getElementById('mode-otomatis');
-const validationSection = document.querySelector('.validation-section');
 // =======================================================
 // --- FUNGSI-FUNGSI UTAMA ---
 // =======================================================
@@ -47,13 +46,6 @@ function setupPaymentSwitch() {
         if (doc.exists) {
             const activeMethod = doc.data().active_method;
             console.log(`Mode pembayaran aktif saat ini: ${activeMethod}`);
-            // --- LOGIKA BARU UNTUK TAMPILKAN/SEMBUNYIKAN PANEL ---
-            if (activeMethod === 'manual') {
-                validationSection.classList.remove('hidden'); // Tampilkan panel
-            } else {
-                validationSection.classList.add('hidden'); // Sembunyikan panel
-            }
-            // --- AKHIR LOGIKA BARU ---
             if (activeMethod === 'otomatis') {
                 modeOtomatisRadio.checked = true;
             } else {
@@ -584,25 +576,10 @@ function listenForPendingOrders() {
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log("Pengguna sudah login, memulai aplikasi...");
-        // TAMPILKAN HALAMAN DENGAN EFEK FADE-IN
-        document.body.classList.add('visible');
         initializeApp();
     } else {
         console.log("Tidak ada pengguna yang login, mengarahkan ke halaman login...");
         window.location.href = 'login.html';
-    }
-
-    // Tambahkan di app.js, laporan.js, dan stok.js
-    const logoutButton = document.getElementById('logout-button');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                console.log('Pengguna berhasil logout.');
-                // Halaman akan otomatis redirect karena ada "penjaga" onAuthStateChanged
-            }).catch((error) => {
-                console.error('Error saat logout:', error);
-            });
-        });
     }
 });
 
