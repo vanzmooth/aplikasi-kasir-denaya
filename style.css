@@ -744,3 +744,41 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 .hidden {
     display: none;
 }
+
+/* ================================================= */
+/* --- GAYA UNTUK LAYAR KECIL (RESPONSIVE) --- */
+/* ================================================= */
+@media (max-width: 768px) {
+
+    /* Atur ulang header menjadi vertikal */
+    .main-header {
+        flex-direction: column;
+        /* Ubah dari baris menjadi kolom */
+        align-items: flex-start;
+        /* Ratakan semua ke kiri */
+        gap: 15px;
+        /* Beri jarak antar judul dan tombol */
+    }
+
+    .header-nav {
+        /* Buat wadah tombol memakai lebar penuh agar bisa diatur */
+        width: 100%;
+        justify-content: flex-start;
+        /* Mulai tombol dari kiri */
+    }
+
+    /* Atur ulang bagian settings menjadi 1 kolom */
+    .settings-section {
+        grid-template-columns: 1fr;
+        /* Ubah dari 2 kolom menjadi 1 kolom */
+        gap: 15px;
+    }
+
+    /* Agar tombol saklar tidak terlalu mepet */
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+}
