@@ -31,6 +31,7 @@ const transactionListEl = document.getElementById('transaction-list');
 const modeManualRadio = document.getElementById('mode-manual');
 const modeOtomatisRadio = document.getElementById('mode-otomatis');
 const validationSection = document.querySelector('.validation-section');
+const selfOrderingSwitchDiv = document.getElementById('self-ordering-switch');
 // =======================================================
 // --- FUNGSI-FUNGSI UTAMA ---
 // =======================================================
@@ -39,39 +40,38 @@ function formatRupiah(number) {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
 }
 // Tambahkan fungsi baru ini di app.js
-function setupPaymentSwitch() {
-    const paymentSettingRef = db.collection('settings').doc('payment');
+// Ganti fungsi setupPaymentSwitch dengan setupSettings ini di app.js
+function setupSettings() {
+    const settingRef = db.collection('settings').doc('payment');
 
-    // Mendengarkan perubahan pada pengaturan secara real-time
-    paymentSettingRef.onSnapshot(doc => {
+    // Listener untuk semua perubahan pengaturan
+    settingRef.onSnapshot(doc => {
         if (doc.exists) {
-            const activeMethod = doc.data().active_method;
-            console.log(`Mode pembayaran aktif saat ini: ${activeMethod}`);
-            // --- LOGIKA BARU UNTUK TAMPILKAN/SEMBUNYIKAN PANEL ---
-            if (activeMethod === 'manual') {
-                validationSection.classList.remove('hidden'); // Tampilkan panel
-            } else {
-                validationSection.classList.add('hidden'); // Sembunyikan panel
-            }
-            // --- AKHIR LOGIKA BARU ---
-            if (activeMethod === 'otomatis') {
-                modeOtomatisRadio.checked = true;
-            } else {
-                modeManualRadio.checked = true;
-            }
+            const settings = doc.data();
+
+            // Logika untuk saklar mode pembayaran
+            const activeMethod = settings.active_method || 'manual';
+            if (activeMethod === 'otomatis') modeOtomatisRadio.checked = true;
+            else modeManualRadio.checked = true;
+
+            // LOGIKA BARU UNTUK SAKLAR PEMESANAN MANDIRI
+            const selfOrderingEnabled = settings.self_ordering_enabled !== false; // default ke true jika tidak ada
+            if (selfOrderingEnabled) document.getElementById('mode-on').checked = true;
+            else document.getElementById('mode-off').checked = true;
+
+            // Tampilkan/sembunyikan panel validasi berdasarkan mode pembayaran
+            if (activeMethod === 'manual') validationSection.classList.remove('hidden');
+            else validationSection.classList.add('hidden');
         }
     });
 
-    // Event saat kasir mengubah mode
-    modeManualRadio.addEventListener('change', () => {
-        if (modeManualRadio.checked) {
-            paymentSettingRef.update({ active_method: 'manual' }).catch(err => console.error(err));
-        }
+    // Event listener untuk setiap saklar
+    document.getElementById('payment-mode-switch').addEventListener('change', (e) => {
+        settingRef.update({ active_method: e.target.value });
     });
-    modeOtomatisRadio.addEventListener('change', () => {
-        if (modeOtomatisRadio.checked) {
-            paymentSettingRef.update({ active_method: 'otomatis' }).catch(err => console.error(err));
-        }
+    document.getElementById('self-ordering-switch').addEventListener('change', (e) => {
+        // Ubah string "true"/"false" dari radio button menjadi boolean
+        settingRef.update({ self_ordering_enabled: e.target.value === 'true' });
     });
 }
 // Tambahkan kembali fungsi ini di app.js
@@ -715,5 +715,5 @@ async function initializeApp() {
     renderCart();
     fetchTransactions();
     listenForPendingOrders();
-    setupPaymentSwitch(); // <-- Panggil fungsi saklar di sini
+    setupSettings(); // <-- Panggil fungsi saklar di sini
 }

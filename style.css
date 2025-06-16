@@ -578,11 +578,17 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 }
 
 /* Tambahkan di style.css */
+/* Ganti gaya .settings-section di style.css dengan ini */
 .settings-section {
     background-color: #e9ecef;
-    padding: 10px 15px;
+    padding: 15px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    display: grid;
+    /* Gunakan grid */
+    grid-template-columns: 1fr 1fr;
+    /* Dua kolom */
+    gap: 20px;
 }
 
 .setting-item {
@@ -597,12 +603,15 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 }
 
 /* GANTI SEMUA GAYA .payment-switch LAMA DENGAN BLOK BARU INI */
+/* ================================================= */
+/* --- GAYA FINAL UNTUK SEMUA TOMBOL SAKLAR --- */
+/* ================================================= */
 
 .payment-switch {
     position: relative;
-    display: flex;
+    display: inline-flex;
+    /* Menggunakan inline-flex agar pas */
     background-color: #e9ecef;
-    /* Warna latar belakang abu-abu */
     border-radius: 20px;
     padding: 2px;
     border: 1px solid #ccc;
@@ -618,77 +627,112 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     border-radius: 20px;
     cursor: pointer;
     z-index: 2;
-    /* Pastikan label di atas slider */
     transition: color 0.3s ease-in-out;
     font-size: 0.85em;
     color: #555;
-    /* Warna teks default */
+    /* Warna teks default (tidak aktif) */
     user-select: none;
-    /* Agar teks tidak bisa di-select */
 }
 
 /* Elemen slider yang bergerak */
 .payment-switch .slider {
     position: absolute;
-    width: 50%;
-    height: 100%;
-    top: 0;
-    left: 0;
+    height: calc(100% - 4px);
+    /* Sesuaikan tinggi dengan padding */
+    top: 2px;
+    left: 2px;
+    /* Posisi awal slider */
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease-in-out;
-    z-index: 1;
-    /* Posisikan slider di belakang label */
+    /* Lebar slider akan diatur oleh JavaScript/CSS per tombol */
 }
 
-/* Saat radio 'manual' dipilih */
-.payment-switch input#mode-manual:checked~.slider {
-    transform: translateX(0%);
+/* --- Aturan untuk SAKLAR MODE PEMBAYARAN --- */
+#payment-mode-switch .slider {
+    width: calc(50% - 2px);
 }
 
-.payment-switch input#mode-manual:checked+label {
+#payment-mode-switch input#mode-manual:checked+label,
+#payment-mode-switch input#mode-otomatis:checked+label {
     color: #007bff;
-    /* Warna teks aktif */
     font-weight: bold;
 }
 
-/* Saat radio 'otomatis' dipilih */
-.payment-switch input#mode-otomatis:checked~.slider {
+#payment-mode-switch input#mode-otomatis:checked~.slider {
     transform: translateX(100%);
 }
 
-.payment-switch input#mode-otomatis:checked+label {
-    color: #007bff;
-    /* Warna teks aktif */
+/* --- Aturan untuk SAKLAR PEMESANAN MANDIRI (ON/OFF) --- */
+#self-ordering-switch .slider {
+    width: calc(50% - 2px);
+}
+
+#self-ordering-switch input#mode-on:checked+label {
+    color: #28a745;
+    /* Warna hijau untuk ON */
     font-weight: bold;
 }
 
+#self-ordering-switch input#mode-off:checked+label {
+    color: #dc3545;
+    /* Warna merah untuk OFF */
+    font-weight: bold;
+}
+
+#self-ordering-switch input#mode-off:checked~.slider {
+    transform: translateX(100%);
+}
+
 /* Tambahkan di style.css, laporan.css, stok.css */
+/* Tambahkan atau ganti di style.css */
+
+/* Standar untuk Header Utama */
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
+.main-header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+/* Wadah untuk tombol-tombol navigasi di header */
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Jarak antar tombol */
+}
+
+/* Tombol Navigasi Biru */
 .nav-btn {
     text-decoration: none;
     background-color: #007bff;
     color: white;
     padding: 10px 15px;
     border-radius: 5px;
-    margin-right: 10px;
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
+/* Tombol Logout Merah */
 .logout-btn {
     padding: 10px 15px;
     font-weight: bold;
+    font-size: 0.9em;
     color: #dc3545;
     background-color: transparent;
     border: 1px solid #dc3545;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .logout-btn:hover {

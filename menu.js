@@ -77,16 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function removeItemFromCart(productId) { const itemIndex = cart.findIndex(item => item.id === productId); if (itemIndex > -1) { cart.splice(itemIndex, 1); renderCart(); renderProducts(); } }
 
     // --- FUNGSI BARU UNTUK MENGAMBIL PENGATURAN PEMBAYARAN ---
-    async function fetchPaymentSetting() {
-        try {
-            const doc = await db.collection('settings').doc('payment').get();
-            if (doc.exists && doc.data().active_method) {
-                activePaymentMethod = doc.data().active_method;
+    // Ganti fungsi fetchPaymentSetting dengan ini di menu.js
+    async function listenForSettings() {
+        db.collection('settings').doc('payment').onSnapshot(doc => {
+            if (doc.exists) {
+                const settings = doc.data();
+
+                // Update mode pembayaran
+                activePaymentMethod = settings.active_method || 'manual';
+                console.log("Mode pembayaran diupdate:", activePaymentMethod);
+
+                // LOGIKA BARU: Cek saklar pemesanan mandiri
+                const orderingEnabled = settings.self_ordering_enabled !== false;
+                const overlay = document.getElementById('ordering-disabled-overlay');
+                if (!orderingEnabled) {
+                    overlay.classList.remove('hidden'); // Tampilkan overlay "TUTUP"
+                } else {
+                    overlay.classList.add('hidden'); // Sembunyikan overlay
+                }
             }
-        } catch (error) {
-            console.error("Gagal mengambil pengaturan, menggunakan mode manual.", error);
-            activePaymentMethod = 'manual';
-        }
+        });
     }
 
     // =======================================================
@@ -250,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INISIALISASI APLIKASI ---
     async function initializeApp() {
-        await fetchPaymentSetting();
+        await listenForSettings();
         await fetchInventory();
         await fetchProducts();
         renderCart();

@@ -37,6 +37,20 @@ header h1 {
     font-weight: bold;
 }
 
+.nav-btn,
+.logout-btn {
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-btn {
+    background-color: #007bff;
+    color: white;
+}
+
 .filter-section {
     background-color: white;
     padding: 15px;

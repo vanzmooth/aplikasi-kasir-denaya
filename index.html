@@ -16,24 +16,32 @@
 
         <section class="product-list-section">
 
-            <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-                <a href="laporan.html"
-                    style="text-decoration: none; background-color: #007bff; color: white; padding: 10px; border-radius: 5px;">Lihat
-                    Laporan Penjualan</a>
-                <a href="stok.html"
-                    style="text-decoration: none; background-color: #17a2b8; color: white; padding: 10px; border-radius: 5px;">
-                    Manajemen Stok
-                </a>
-                <button id="logout-button" class="logout-btn">Logout</button>
-            </div>
+            <header class="main-header">
+                <h1>Aplikasi Kasir</h1>
+                <div class="header-nav">
+                    <a href="laporan.html" class="nav-btn">Laporan</a>
+                    <a href="stok.html" class="nav-btn">Stok</a>
+                    <button id="logout-button" class="logout-btn">Logout</button>
+                </div>
+            </header>
             <section class="settings-section">
                 <div class="setting-item">
-                    <span class="setting-label">Mode Pembayaran Aktif:</span>
-                    <div class="payment-switch">
-                        <input type="radio" id="mode-manual" name="payment_mode" value="manual" checked>
+                    <span class="setting-label">Mode Pembayaran</span>
+                    <div id="payment-mode-switch" class="payment-switch">
+                        <input type="radio" id="mode-manual" name="payment_mode" value="manual">
                         <label for="mode-manual">Manual</label>
                         <input type="radio" id="mode-otomatis" name="payment_mode" value="otomatis">
                         <label for="mode-otomatis">Otomatis</label>
+                        <span class="slider"></span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Pemesanan Mandiri</span>
+                    <div id="self-ordering-switch" class="payment-switch">
+                        <input type="radio" id="mode-on" name="self_ordering_mode" value="true">
+                        <label for="mode-on">ON</label>
+                        <input type="radio" id="mode-off" name="self_ordering_mode" value="false">
+                        <label for="mode-off">OFF</label>
                         <span class="slider"></span>
                     </div>
                 </div>
