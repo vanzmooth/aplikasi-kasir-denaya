@@ -43,7 +43,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeOverlay = document.getElementById('welcome-overlay');
     const closeWelcomeBtn = document.getElementById('close-welcome-btn');
     const infoButton = document.getElementById('info-button');
+    // Di dalam DOMContentLoaded di menu.js
+    const customerNameInput = document.getElementById('customer-name');
+    const footerCustomerNameInput = document.getElementById('footer-customer-name');
+    // Di dalam DOMContentLoaded di menu.js
+    const footerCheckoutButton = document.getElementById('footer-checkout-button');
+    const mainCheckoutButton = document.getElementById('checkout-button');
+    // Di dalam DOMContentLoaded di menu.js
+    if ('IntersectionObserver' in window) {
+        const observerTarget = document.getElementById('page-bottom-observer');
+        const stickyFooter = document.getElementById('sticky-footer');
 
+        if (observerTarget && stickyFooter) {
+            const observer = new IntersectionObserver((entries) => {
+                // entri pertama adalah 'sensor' kita
+                if (entries[0].isIntersecting) {
+                    // Jika sensor terlihat (di bawah halaman), sembunyikan footer
+                    stickyFooter.classList.add('is-hidden');
+                } else {
+                    // Jika sensor tidak terlihat, tampilkan footer
+                    stickyFooter.classList.remove('is-hidden');
+                }
+            });
+            // Mulai amati sensornya
+            observer.observe(observerTarget);
+        }
+    }
+    if (footerCheckoutButton && mainCheckoutButton) {
+        footerCheckoutButton.addEventListener('click', () => {
+            // Cukup panggil klik pada tombol checkout utama
+            mainCheckoutButton.click();
+        });
+    }
+    customerNameInput.addEventListener('input', (e) => {
+        footerCustomerNameInput.value = e.target.value;
+    });
+    footerCustomerNameInput.addEventListener('input', (e) => {
+        customerNameInput.value = e.target.value;
+    });
     // Cek apakah pengguna sudah pernah berkunjung
     if (!localStorage.getItem('hasVisitedDenaya')) {
         // Jika BELUM, tampilkan overlay dengan menghapus kelas 'hidden'
@@ -70,7 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchInventory() { try { const doc = await db.collection('counters').doc('stock_tracker').get(); if (doc.exists) { inventory = doc.data(); } } catch (error) { console.error("Gagal memuat stok:", error); } }
     async function fetchProducts() { productListEl.innerHTML = '<p>Memuat menu...</p>'; try { const snapshot = await db.collection('products').get(); if (snapshot.empty) { productListEl.innerHTML = '<p>Menu belum tersedia.</p>'; return; } products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderProducts(); } catch (error) { productListEl.innerHTML = '<p>Gagal memuat menu.</p>'; } }
     function renderProducts() { productListEl.innerHTML = ''; products.forEach(product => { const productCard = document.createElement('div'); productCard.className = 'product-card'; const itemInCart = cart.find(cartItem => cartItem.id === product.id); const quantityInCart = itemInCart ? itemInCart.quantity : 0; if (quantityInCart > 0) productCard.classList.add('in-cart'); let isOutOfStock = (product.stock_id && (inventory[product.stock_id] === undefined || inventory[product.stock_id] <= 0)); if (isOutOfStock) productCard.classList.add('out-of-stock'); productCard.innerHTML = `${quantityInCart > 0 ? `<div class="quantity-badge">${quantityInCart}</div>` : ''}<img src="${product.image || 'https://placehold.co/100x100?text=Produk'}" alt="${product.name}"><div class="product-name">${product.name}</div><div class="product-price">${formatRupiah(product.price)}</div>`; if (!isOutOfStock) { productCard.addEventListener('click', () => addToCart(product.id)); } productListEl.appendChild(productCard); }); }
-    function renderCart() { cartItemsEl.innerHTML = ''; if (cart.length === 0) { cartItemsEl.innerHTML = '<p>Pilih jajanan yang kamu suka!</p>'; } else { cart.forEach(item => { const cartItem = document.createElement('div'); cartItem.className = 'cart-item'; cartItem.innerHTML = `<span class="cart-item-name">${item.name}</span><div class="cart-item-controls"><button class="btn-quantity" data-id="${item.id}" data-action="decrease">-</button><input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" data-id="${item.id}"><button class="btn-quantity" data-id="${item.id}" data-action="increase">+</button></div><span class="cart-item-price">${formatRupiah(item.price * item.quantity)}</span><button class="btn-remove" data-id="${item.id}">🗑️</button>`; cartItemsEl.appendChild(cartItem); }); } const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0); totalPriceEl.textContent = formatRupiah(totalPrice); localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); }
+    function renderCart() {
+        cartItemsEl.innerHTML = '';
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = '<p>Pilih jajanan yang kamu suka!</p>';
+        } else {
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `<span class="cart-item-name">${item.name}</span><div class="cart-item-controls"><button class="btn-quantity" data-id="${item.id}" data-action="decrease">-</button><input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" data-id="${item.id}"><button class="btn-quantity" data-id="${item.id}" data-action="increase">+</button></div><span class="cart-item-price">${formatRupiah(item.price * item.quantity)}</span><button class="btn-remove" data-id="${item.id}">🗑️</button>`;
+                cartItemsEl.appendChild(cartItem);
+            });
+        }
+        const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        totalPriceEl.textContent = formatRupiah(totalPrice);
+        // Update total di footer
+        const footerTotalPriceEl = document.getElementById('footer-total-price');
+        if (footerTotalPriceEl) {
+            footerTotalPriceEl.textContent = formatRupiah(totalPrice);
+        }
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    }
     function addToCart(productId, quantityToAdd = 1) { const product = products.find(p => p.id === productId); if (!product || !product.stock_id) { alert("Produk ini tidak memiliki ID Stok."); return; } const stockId = product.stock_id; const stockAvailable = inventory[stockId] || 0; let quantityOfSameStockInCart = 0; cart.forEach(item => { if (item.stock_id === stockId) quantityOfSameStockInCart += item.quantity; }); const existingItem = cart.find(item => item.id === productId); let finalQuantityToAdd = quantityToAdd; if (!existingItem && product.min_order > 1) { if (quantityToAdd === 1) finalQuantityToAdd = product.min_order; } if (quantityOfSameStockInCart + finalQuantityToAdd > stockAvailable) { alert(`Stok untuk kategori ini hanya tersisa ${stockAvailable}.`); return; } if (existingItem) existingItem.quantity += quantityToAdd; else cart.push({ ...product, quantity: finalQuantityToAdd }); renderCart(); renderProducts(); }
     function updateCartItemQuantity(productId, action) { const itemIndex = cart.findIndex(item => item.id === productId); if (itemIndex === -1) return; const item = cart[itemIndex]; const minOrder = item.min_order || 1; if (action === 'increase') { item.quantity++; } else if (action === 'decrease') { if (item.quantity - 1 < minOrder) { alert(`Minimal pembelian untuk ${item.name} adalah ${minOrder} pcs.`); return; } item.quantity--; if (item.quantity <= 0) cart.splice(itemIndex, 1); } renderCart(); renderProducts(); }
     function setCartItemQuantity(productId, newQuantity) { const itemIndex = cart.findIndex(item => item.id === productId); if (itemIndex === -1) return; const item = cart[itemIndex]; const minOrder = item.min_order || 1; const quantity = parseInt(newQuantity); if (isNaN(quantity)) { renderCart(); return; } if (quantity < minOrder) { alert(`Minimal pembelian untuk ${item.name} adalah ${minOrder} pcs.`); if (quantity <= 0 && minOrder <= 1) cart.splice(itemIndex, 1); } else { item.quantity = quantity; } renderCart(); renderProducts(); }

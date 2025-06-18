@@ -549,3 +549,77 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 #info-button:hover {
     background-color: #f0f2f5;
 }
+
+/* Tambahkan di paling bawah menu.css */
+
+/* --- Gaya untuk Sticky Footer Dinamis (Hanya Mobile) --- */
+
+/* Sembunyikan footer di layar lebar (desktop) */
+.checkout-footer {
+    display: none;
+}
+
+@media (max-width: 800px) {
+
+    /* Beri ruang kosong di bawah halaman agar menu terakhir tidak tertutup */
+    body {
+        padding-bottom: 100px;
+    }
+
+    /* Tampilkan dan atur footer agar menempel */
+    .checkout-footer {
+        display: flex;
+        /* Aktifkan di mobile */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding: 10px 15px;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        gap: 30px;
+        z-index: 900;
+        box-sizing: border-box;
+        transform: translateY(0%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Gaya untuk menyembunyikan footer saat scroll ke bawah */
+    .checkout-footer.is-hidden {
+        transform: translateY(110%);
+        /* Dorong ke bawah hingga hilang */
+    }
+
+    /* Penataan elemen di dalam footer */
+    .checkout-footer .form-group-footer {
+        flex-grow: 1;
+    }
+
+    .checkout-footer .form-group-footer input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .total-display {
+        text-align: right;
+    }
+
+    .total-display .total-label {
+        font-size: 1em;
+        color: #666;
+        display: block;
+    }
+
+    .total-display #footer-total-price {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .checkout-action .checkout-button {
+        padding: 12px;
+        margin: 0;
+    }
+}
