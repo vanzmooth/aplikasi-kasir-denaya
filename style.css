@@ -744,3 +744,41 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 .hidden {
     display: none;
 }
+
+/* Tambahkan ini di paling bawah style.css */
+
+/* ================================================= */
+/* --- Gaya untuk Layar Kecil (Responsif) --- */
+/* ================================================= */
+@media (max-width: 768px) {
+
+    /* Aturan untuk Header (sudah kita buat sebelumnya) */
+    .main-header {
+        flex-direction: column;
+        /* Ubah dari baris menjadi kolom */
+        align-items: flex-start;
+        /* Ratakan semua ke kiri */
+        gap: 15px;
+        /* Beri jarak antar judul dan tombol */
+    }
+
+    .header-nav {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* INI BAGIAN KUNCINYA: Membuat saklar menjadi 1 kolom */
+    .settings-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        /* Jarak vertikal antar saklar */
+    }
+
+    .setting-item {
+        /* Opsional: Jika ingin label di atas tombol di mode mobile */
+        /* flex-direction: column; 
+        align-items: flex-start;
+        gap: 8px; */
+    }
+
+}

@@ -1,10 +1,12 @@
 // =======================================================
 // CLOUD FUNCTIONS - VERSI FINAL DENGAN onREQUEST + CORS
 // =======================================================
+// const functions = require('firebase-functions');
 const { onRequest } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const admin = require("firebase-admin");
 const midtransClient = require("midtrans-client");
+
 
 // Konfigurasi CORS yang lebih spesifik
 const cors = require("cors")({
@@ -25,9 +27,9 @@ setGlobalOptions({ region: "asia-southeast2" });
 
 // Inisialisasi Klien Midtrans
 const snap = new midtransClient.Snap({
-    isProduction: false,
-    serverKey: "SB-Mid-server-47mAflFfYOflRYtNDTAl3THJ",
-    clientKey: "SB-Mid-client-x4pNw1UvoyxVy9ud",
+    isProduction: true,
+    serverKey: process.env.MIDTRANS_SERVER_KEY,
+    clientKey: process.env.MIDTRANS_CLIENT_KEY,
 });
 
 // Fungsi Cloud Function dengan CORS yang benar

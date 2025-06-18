@@ -135,26 +135,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNGSI BARU UNTUK MENGAMBIL PENGATURAN PEMBAYARAN ---
     // Ganti fungsi fetchPaymentSetting dengan ini di menu.js
-    async function listenForSettings() {
-        db.collection('settings').doc('payment').onSnapshot(doc => {
-            if (doc.exists) {
-                const settings = doc.data();
+    // async function listenForSettings() {
+    //     db.collection('settings').doc('payment').onSnapshot(doc => {
+    //         if (doc.exists) {
+    //             const settings = doc.data();
 
-                // Update mode pembayaran
-                activePaymentMethod = settings.active_method || 'manual';
-                console.log("Mode pembayaran diupdate:", activePaymentMethod);
+    //             // Update mode pembayaran
+    //             activePaymentMethod = settings.active_method || 'manual';
+    //             console.log("Mode pembayaran diupdate:", activePaymentMethod);
 
-                // LOGIKA BARU: Cek saklar pemesanan mandiri
-                const orderingEnabled = settings.self_ordering_enabled !== false;
-                const overlay = document.getElementById('ordering-disabled-overlay');
-                if (!orderingEnabled) {
-                    overlay.classList.remove('hidden'); // Tampilkan overlay "TUTUP"
-                } else {
-                    overlay.classList.add('hidden'); // Sembunyikan overlay
-                }
-            }
-        });
-    }
+    //             // LOGIKA BARU: Cek saklar pemesanan mandiri
+    //             const orderingEnabled = settings.self_ordering_enabled !== false;
+    //             const overlay = document.getElementById('ordering-disabled-overlay');
+    //             if (!orderingEnabled) {
+    //                 overlay.classList.remove('hidden'); // Tampilkan overlay "TUTUP"
+    //             } else {
+    //                 overlay.classList.add('hidden'); // Sembunyikan overlay
+    //             }
+    //         }
+    //     });
+    // }
 
     // =======================================================
     // --- EVENT LISTENERS ---
@@ -316,11 +316,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- INISIALISASI APLIKASI ---
-    async function initializeApp() {
-        await listenForSettings();
+    // async function initializeApp() {
+    //     await listenForSettings();
+    //     await fetchInventory();
+    //     await fetchProducts();
+    //     renderCart();
+    // }
+    // GUNAKAN TIGA BLOK BARU INI
+
+    // Variabel "penjaga" agar konten hanya dimuat sekali
+    let isAppContentloaded = false;
+
+    // Fungsi ini sekarang berisi semua tugas untuk memuat konten utama
+    async function loadAppContent() {
+        // Jika sudah pernah dimuat, jangan lakukan lagi
+        if (isAppContentloaded) return;
+
+        console.log("Memuat konten utama aplikasi...");
         await fetchInventory();
         await fetchProducts();
         renderCart();
+        isAppContentloaded = true; // Tandai sudah dimuat
+    }
+
+    // Fungsi ini sekarang menjadi "Gerbang Utama"
+    function listenForSettings() {
+        const orderingDisabledOverlay = document.getElementById('ordering-disabled-overlay');
+        const mainAppContainer = document.querySelector('.app-container');
+
+        db.collection('settings').doc('payment').onSnapshot(doc => {
+            if (doc.exists) {
+                const settings = doc.data();
+                activePaymentMethod = settings.active_method || 'manual';
+
+                const orderingEnabled = settings.self_ordering_enabled !== false;
+
+                if (orderingEnabled) {
+                    // JIKA DIIZINKAN: Sembunyikan overlay dan muat aplikasi
+                    orderingDisabledOverlay.classList.add('hidden');
+                    mainAppContainer.style.display = 'grid';
+                    loadAppContent(); // Baru panggil fungsi untuk memuat konten
+                } else {
+                    // JIKA DILARANG: Tampilkan overlay dan sembunyikan aplikasi
+                    orderingDisabledOverlay.classList.remove('hidden');
+                    mainAppContainer.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    // Fungsi inisialisasi sekarang hanya memulai "penjaga" dan "pendengar"
+    function initializeApp() {
+        document.body.classList.add('visible');
+        listenForSettings(); // Langsung dengarkan pengaturan
     }
     initializeApp();
 });
