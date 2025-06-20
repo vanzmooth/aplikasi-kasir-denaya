@@ -22,17 +22,20 @@ let products = [];
 let inventory = {};
 
 // --- ELEMEN DOM ---
+// --- ELEMEN DOM ---
 const productListEl = document.getElementById('product-list');
 const cartItemsEl = document.getElementById('cart-items');
 const totalPriceEl = document.getElementById('total-price');
-const btnPay = document.getElementById('btn-pay');
 const validationListEl = document.getElementById('validation-list');
 const transactionListEl = document.getElementById('transaction-list');
+const logoutButton = document.getElementById('logout-button');
 const modeManualRadio = document.getElementById('mode-manual');
 const modeOtomatisRadio = document.getElementById('mode-otomatis');
 const validationSection = document.querySelector('.validation-section');
 const selfOrderingSwitchDiv = document.getElementById('self-ordering-switch');
-// =======================================================
+const cashPaymentOverlay = document.getElementById('cash-payment-overlay');
+const cashTotalAmountEl = document.getElementById('cash-total-amount');
+const cashChangeAmountEl = document.getElementById('cash-change-amount');
 // --- FUNGSI-FUNGSI UTAMA ---
 // =======================================================
 
@@ -294,6 +297,27 @@ function removeItemFromCart(productId) {
         renderProducts();
     }
 }
+
+function updateProductCardUI(productId) {
+    const productCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+    if (!productCard) return;
+    const itemInCart = cart.find(item => item.id === productId);
+    const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+    let badge = productCard.querySelector('.quantity-badge');
+    if (quantityInCart > 0) {
+        if (!badge) { badge = document.createElement('div'); badge.className = 'quantity-badge'; productCard.prepend(badge); }
+        badge.textContent = quantityInCart;
+        productCard.classList.add('in-cart');
+    } else {
+        if (badge) badge.remove();
+        productCard.classList.remove('in-cart');
+    }
+}
+
+// --- FUNGSI BARU YANG HILANG SEBELUMNYA ---
+function updateAllProductBadges() {
+    products.forEach(p => updateProductCardUI(p.id));
+}
 // Ganti fungsi setCartItemQuantity di kedua file
 function setCartItemQuantity(productId, newQuantity) {
     const itemIndex = cart.findIndex(item => item.id === productId);
@@ -367,15 +391,13 @@ async function getNextQueueNumber() {
 }
 
 // Pastikan fungsi finalizeTransaction Anda seperti ini
-async function finalizeTransaction(items, customerName = 'Walk-in Customer', pendingOrderId = null) {
-    // 1. Validasi dan kurangi stok
+// GANTI FUNGSI INI DI app.js
+async function finalizeTransaction(items, paymentInfo = {}, customerName = 'Walk-in Customer', originalOrderId = null) {
     await updateStock(items);
-
-    // 2. Dapatkan nomor antrian baru
     const queueNumber = await getNextQueueNumber();
-
-    // 3. Siapkan data transaksi final
     const totalAmount = items.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0);
+
+    // Siapkan data lengkap yang akan disimpan
     const finalTransactionData = {
         items: items,
         totalAmount: totalAmount,
@@ -383,20 +405,18 @@ async function finalizeTransaction(items, customerName = 'Walk-in Customer', pen
         status: "Sedang Disiapkan",
         queueNumber: queueNumber,
         customerName: customerName,
-        originalOrderId: pendingOrderId
+        originalOrderId: originalOrderId,
+        payment: paymentInfo // <-- KUNCI: Info pembayaran sekarang ikut disimpan
     };
 
-    // 4. Simpan ke koleksi 'transactions' utama
     const docRef = await db.collection('transactions').add(finalTransactionData);
 
-    // 5. HAPUS pesanan tertunda SETELAH semuanya selesai (jika ada)
-    if (pendingOrderId) {
-        await db.collection('pending_orders').doc(pendingOrderId).delete();
+    if (originalOrderId) {
+        await db.collection('pending_orders').doc(originalOrderId).delete();
     }
 
-    // 6. Kembalikan data transaksi yang sudah lengkap untuk dicetak
-    const newTransaction = await docRef.get();
-    return { id: newTransaction.id, ...newTransaction.data() };
+    // Kembalikan objek lengkap untuk dicetak
+    return { id: docRef.id, ...finalTransactionData, createdAt: new Date() };
 }
 
 // GANTI SELURUH FUNGSI PRINTRECEIPT LAMA ANDA DENGAN VERSI LENGKAP INI
@@ -407,23 +427,30 @@ function printReceipt(transaction) {
         phone: "WA: 0878-2603-6767",
     };
 
-    const txDate = transaction.createdAt.toDate().toLocaleString('id-ID', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-    });
+    // --- LOGIKA TANGGAL YANG SUDAH PINTAR ---
+    const txDateObject = transaction.createdAt.toDate ? transaction.createdAt.toDate() : transaction.createdAt;
+    const txDate = txDateObject.toLocaleString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-    let itemsHtml = '';
+    let itemsText = '';
     transaction.items.forEach(item => {
-        itemsHtml += `
-            <div class="item-line">
-                <div>${item.name} (x${item.quantity})</div>
-                <div class="text-center">${formatRupiah(item.price * item.quantity)}</div>
-            </div>
-        `;
+        const itemName = `${item.name} (x${item.quantity})`;
+        const itemTotal = formatRupiah(item.price * item.quantity);
+        itemsText += `<pre class="item-line-text">${createReceiptLine(itemName, itemTotal)}</pre>`;
     });
 
     // Kita gunakan fungsi createReceiptLine yang sudah ada untuk Total
     const totalLine = createReceiptLine('TOTAL', formatRupiah(transaction.totalAmount));
+    let paymentHtml = `<pre class="total-line">${totalLine}</pre>`;
+
+    // --- LOGIKA CERDAS: BACA DARI transaction.payment ---
+    // Cek apakah ada data pembayaran dan metodenya adalah 'cash'
+    if (transaction.payment && transaction.payment.method === 'cash') {
+        const cashLine = createReceiptLine('TUNAI', formatRupiah(transaction.payment.cashAmount));
+        const changeLine = createReceiptLine('KEMBALI', formatRupiah(transaction.payment.changeAmount));
+        paymentHtml += `<pre>${cashLine}</pre><pre>${changeLine}</pre>`;
+    }
+
+    const qrId = transaction.originalOrderId || transaction.id;
 
     const baseUrl = window.location.origin;
     const statusUrl = `${baseUrl}/status.html?id=${transaction.originalOrderId || transaction.id}`;
@@ -454,9 +481,18 @@ function printReceipt(transaction) {
                         .separator { border-top: 1px dashed #000; margin: 10px 0; }
                         .item-line { margin-bottom: 5px; }
                         pre {
-                            white-space: pre-wrap; margin: 0; font-family: 'Courier New', monospace; 
-                            font-size: 12px; border-top: 1px solid #000; padding-top: 5px; margin-top: 5px; font-weight: bold;
-                        }
+        white-space: pre-wrap;
+        margin: 0;
+        font-family: 'Courier New', monospace; 
+        font-size: 12px;
+        padding-top: 2px; /* Jarak antar baris tunai/kembali */
+    }
+.total-line { 
+        font-weight: bold; 
+        border-top: 1px solid #000; 
+        padding-top: 5px; 
+        margin-top: 5px; 
+    }
                         .footer { margin-top: 15px; }
                     </style>
                 </head>
@@ -467,8 +503,8 @@ function printReceipt(transaction) {
                     <p>Tgl: ${txDate}</p>
                     <p>Antrian: #${transaction.queueNumber}</p>
                     <div class="separator"></div>
-                    <div>${itemsHtml}</div>
-                    <pre>${totalLine}</pre>
+                    <div>${itemsText}</div>
+                    <pre>${paymentHtml}</pre>
                     <div class="footer text-center">
                         <p>Terima kasih sudah jajan di Jajanan Denaya!</p>
                         <p>Pantau status pesanan Anda.</p>
@@ -503,15 +539,39 @@ function fetchTransactions() {
             const txItem = document.createElement('div');
             txItem.className = 'transaction-item';
             txItem.innerHTML = `
-                <div class="tx-main-info">
-                    <div class="tx-summary">
-                        <div class="tx-info"><span class="tx-queue">#${tx.queueNumber}</span><div class="tx-details"><span class="tx-customer-name">${tx.customerName || ''}</span><span class="tx-total">${formatRupiah(tx.totalAmount)}</span></div></div>
-                        <div class="tx-status"><span class="status-badge ${tx.status === 'Selesai' ? 'status-complete' : (tx.status === 'Siap Diambil' ? 'status-ready' : 'status-preparing')}">${tx.status}</span></div>
-                    </div>
-                    <div class="tx-date">${txDate}</div>
-                    <div class="tx-actions"><button class="btn-action btn-reprint" data-id="${tx.id}">Cetak</button><button class="btn-action btn-change-status" data-id="${tx.id}" data-status="${tx.status}" ${tx.status === 'Selesai' ? 'disabled' : ''}>${tx.status === 'Sedang Disiapkan' ? 'Siap' : 'Selesai'}</button></div>
-                </div>
-                <div class="tx-item-list-container hidden"><p><strong>Rincian Pesanan:</strong></p>${itemsDetailHtml}</div>`;
+    <div class="tx-summary">
+        <div class="tx-info">
+            <span class="tx-queue">#${tx.queueNumber || '-'}</span>
+            <div class="tx-details">
+                <span class="tx-customer-name">${tx.customerName || ''}</span>
+                <span class="tx-total">${formatRupiah(tx.totalAmount)}</span>
+            </div>
+        </div>
+        <div class="tx-status">
+            <span class="status-badge ${tx.status === 'Selesai' ? 'status-complete' : (tx.status === 'Siap Diambil' ? 'status-ready' : 'status-preparing')}">${tx.status || 'N/A'}</span>
+        </div>
+        <div class="tx-date">${txDate}</div>
+    </div>
+
+    <div class="tx-actions">
+        <button class="btn-action btn-reprint" data-id="${tx.id}">Cetak</button>
+        <button class="btn-action btn-change-status" 
+                data-id="${tx.id}" 
+                data-status="${tx.status}" 
+                ${tx.status === 'Selesai' || tx.status === 'Siap Diambil' ? 'disabled' : ''}>
+            Tandai Siap
+        </button>
+        <button class="btn-action btn-complete-status" 
+                data-id="${tx.id}" 
+                data-status="${tx.status}" 
+                ${tx.status !== 'Siap Diambil' ? 'disabled' : ''}>
+            Selesaikan
+        </button>
+    </div>
+                <div class="tx-item-details hidden">
+        <p><strong>Rincian Pesanan:</strong></p>
+        ${itemsDetailHtml}
+    </div>`;
             transactionListEl.appendChild(txItem);
         });
     }, err => { console.error("Error mendengarkan transaksi: ", err); });
@@ -632,6 +692,8 @@ validationListEl.addEventListener('click', async (event) => {
     const orderId = target.dataset.id;
     if (!orderId) return;
 
+    // Di dalam validationListEl.addEventListener di app.js
+
     if (target.classList.contains('btn-approve')) {
         target.disabled = true;
         target.textContent = 'Memproses...';
@@ -639,11 +701,27 @@ validationListEl.addEventListener('click', async (event) => {
             const pendingOrderRef = db.collection('pending_orders').doc(orderId);
             const pendingOrderDoc = await pendingOrderRef.get();
             if (!pendingOrderDoc.exists) throw new Error("Pesanan tidak ditemukan lagi.");
+
             const orderData = pendingOrderDoc.data();
-            await finalizeTransaction(orderData.items, orderData.customerName, orderId);
+
+            // --- FIX #1: Urutan parameter diperbaiki & paymentInfo dibuat ---
+            // Kita buat objek paymentInfo untuk konsistensi data
+            const paymentInfo = {
+                method: 'otomatis_disetujui',
+                details: orderData.payment_details || null
+            };
+            // Panggil finalizeTransaction dengan urutan yang benar: (items, paymentInfo, customerName, orderId)
+            await finalizeTransaction(orderData.items, paymentInfo, orderData.customerName, orderId);
+
             alert(`Pesanan untuk ${orderData.customerName} berhasil disetujui.`);
+
+            // --- FIX #2: Hapus elemen dari layar secara manual ---
+            // Ini memberikan feedback instan tanpa perlu menunggu onSnapshot
+            target.closest('.validation-item').remove();
+
         } catch (error) {
             alert(`Gagal menyetujui pesanan: ${error.message}`);
+            // Jika gagal, kembalikan tombol ke normal
             target.disabled = false;
             target.textContent = '✔️ Setujui';
         }
@@ -660,52 +738,120 @@ validationListEl.addEventListener('click', async (event) => {
     }
 });
 
+// Ganti seluruh listener transactionListEl Anda dengan ini
 transactionListEl.addEventListener('click', async (event) => {
     const target = event.target;
+
+    // --- BAGIAN 1: PROSES JIKA YANG DIKLIK ADALAH TOMBOL ---
     if (target.classList.contains('btn-action')) {
         const transactionId = target.dataset.id;
         if (!transactionId) return;
+
+        // Logika untuk tombol Ubah Status -> "Tandai Siap"
         if (target.classList.contains('btn-change-status')) {
-            const currentStatus = target.dataset.status;
-            let newStatus = '';
-            if (currentStatus === "Sedang Disiapkan") newStatus = "Siap Diambil";
-            else if (currentStatus === "Siap Diambil") newStatus = "Selesai";
-            if (newStatus) {
-                try { await db.collection('transactions').doc(transactionId).update({ status: newStatus }); }
-                catch (error) { console.error("Gagal update status:", error); alert("Gagal update status."); }
+            if (target.dataset.status === "Sedang Disiapkan") {
+                try { await db.collection('transactions').doc(transactionId).update({ status: "Siap Diambil" }); }
+                catch (error) { console.error("Gagal update status:", error); }
             }
         }
+
+        // Logika untuk tombol Selesaikan
+        if (target.classList.contains('btn-complete-status')) {
+            if (target.dataset.status === "Siap Diambil") {
+                try { await db.collection('transactions').doc(transactionId).update({ status: "Selesai" }); }
+                catch (error) { console.error("Gagal update status:", error); }
+            }
+        }
+
+        // Logika untuk tombol Cetak Ulang
         if (target.classList.contains('btn-reprint')) {
             try {
                 const doc = await db.collection('transactions').doc(transactionId).get();
-                if (doc.exists) { const transactionData = { id: doc.id, ...doc.data() }; printReceipt(transactionData); }
+                if (doc.exists) {
+                    const transactionData = { id: doc.id, ...doc.data() };
+                    printReceipt(transactionData);
+                }
             } catch (error) {
-                console.error("Gagal mengambil data untuk cetak ulang:", error); // DENGAN BARIS BARU INI
                 alert(`Gagal mencetak ulang struk: ${error.message}`);
             }
         }
-    } else {
-        const transactionItem = target.closest('.transaction-item');
-        if (transactionItem) {
-            const detailsDiv = transactionItem.querySelector('.tx-item-details');
-            if (detailsDiv) detailsDiv.classList.toggle('hidden');
+        return; // Hentikan fungsi di sini setelah tombol diproses
+    }
+
+    // --- BAGIAN 2: JIKA BUKAN TOMBOL, JALANKAN BUKA-TUTUP DETAIL ---
+    const transactionItem = target.closest('.transaction-item');
+    if (transactionItem) {
+        const detailsDiv = transactionItem.querySelector('.tx-item-details');
+        if (detailsDiv) {
+            detailsDiv.classList.toggle('hidden');
         }
     }
 });
 
-btnPay.addEventListener('click', async () => {
-    if (cart.length === 0) { alert('Keranjang Anda masih kosong!'); return; }
+// HAPUS listener lama untuk 'btn-pay'
+// LALU TAMBAHKAN SEMUA LISTENER INI
+
+// Listener untuk tombol "Bayar Tunai" utama
+const btnPayCash = document.getElementById('btn-pay-cash');
+btnPayCash.addEventListener('click', () => {
+    if (cart.length === 0) { alert('Keranjang kosong.'); return; }
+    const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    document.getElementById('cash-total-amount').textContent = formatRupiah(total);
+    document.getElementById('cash-change-amount').textContent = formatRupiah(0);
+    document.getElementById('cash-received-input').value = '';
+    document.getElementById('cash-payment-overlay').classList.remove('hidden');
+    document.getElementById('cash-received-input').focus();
+});
+
+// Listener untuk input uang diterima
+const cashReceivedInput = document.getElementById('cash-received-input');
+cashReceivedInput.addEventListener('input', () => {
+    const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const received = parseInt(cashReceivedInput.value) || 0;
+    const change = received - total;
+    document.getElementById('cash-change-amount').textContent = (change >= 0) ? formatRupiah(change) : '-';
+});
+
+// Listener untuk tombol batal di modal
+const cancelCashBtn = document.getElementById('cancel-cash-btn');
+cancelCashBtn.addEventListener('click', () => {
+    document.getElementById('cash-payment-overlay').classList.add('hidden');
+});
+
+// Listener untuk tombol konfirmasi & cetak
+const confirmCashBtn = document.getElementById('confirm-cash-btn');
+confirmCashBtn.addEventListener('click', async () => {
+    const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const received = parseInt(cashReceivedInput.value) || 0;
+    if (received < total) { alert('Uang yang diterima kurang dari total belanja.'); return; }
+
+    confirmCashBtn.disabled = true;
+    confirmCashBtn.textContent = 'Memproses...';
+
     try {
-        const finalTransactionData = await finalizeTransaction(cart);
+        // Buat objek paymentInfo di sini
+        const paymentInfo = {
+            method: 'cash',
+            cashAmount: received,
+            changeAmount: received - total
+        };
+        // Panggil finalizeTransaction dengan menyertakan paymentInfo
+        const finalTransactionData = await finalizeTransaction(cart, paymentInfo);
+
+        // Panggil printReceipt dengan data lengkap yang dikembalikan
         printReceipt(finalTransactionData);
+
+        // Reset UI
         cart = [];
         localStorage.removeItem('keranjangBelanja');
         renderCart();
-        renderProducts(); // <-- TAMBAHKAN BARIS INI
-
+        updateAllProductBadges(); // Panggil fungsi baru untuk membersihkan semua badge
+        cashPaymentOverlay.classList.add('hidden');
     } catch (error) {
-        console.error("Error pada proses pembayaran kasir:", error);
         alert(`Transaksi gagal: ${error.message}`);
+    } finally {
+        confirmCashBtn.disabled = false;
+        confirmCashBtn.textContent = 'Konfirmasi & Cetak';
     }
 });
 

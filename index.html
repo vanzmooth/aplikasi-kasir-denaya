@@ -72,7 +72,7 @@
                     <h3>Total:</h3>
                     <h3 id="total-price">Rp 0</h3>
                 </div>
-                <button id="btn-pay" class="pay-button">BAYAR</button>
+                <button id="btn-pay-cash" class="btn-pay btn-main-action">Bayar Tunai</button>
             </section>
             <section class="history-section">
                 <h2>Riwayat Transaksi</h2>
@@ -83,6 +83,31 @@
         </div>
 
     </div>
+
+    <div id="cash-payment-overlay" class="overlay-container hidden">
+        <div class="modal-content">
+            <h2>Pembayaran Tunai</h2>
+            <div class="cash-details">
+                <div class="cash-row">
+                    <span>Total Belanja:</span>
+                    <span id="cash-total-amount">Rp 0</span>
+                </div>
+                <div class="cash-row">
+                    <label for="cash-received-input">Uang Diterima (Rp):</label>
+                    <input type="number" id="cash-received-input" placeholder="misal: 50000">
+                </div>
+                <div class="cash-row change-row">
+                    <span>Kembalian:</span>
+                    <span id="cash-change-amount">Rp 0</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-cash-btn" type="button">Batal</button>
+                <button id="confirm-cash-btn" type="button">Konfirmasi & Cetak</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>

@@ -782,3 +782,162 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     }
 
 }
+
+/* ================================================= */
+/* --- GAYA FINAL UNTUK TOMBOL & MODAL KASIR --- */
+/* ================================================= */
+
+/* Tombol Aksi Utama (Bayar Tunai) */
+.btn-main-action {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    /* Warna biru konsisten */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-main-action:hover {
+    background-color: #0056b3;
+}
+
+/* Wadah utama overlay (berlaku untuk semua overlay) */
+.overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+/* Kelas untuk menyembunyikan overlay */
+.hidden {
+    display: none !important;
+}
+
+/* Kartu Modal di tengah */
+.modal-content {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.cash-details {
+    margin: 20px 0;
+}
+
+.cash-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cash-row label {
+    font-weight: 600;
+}
+
+.cash-row input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: right;
+    font-size: 1.1em;
+    width: 120px;
+}
+
+.change-row {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+#confirm-cash-btn {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Tambahkan di style.css */
+
+/* Mengubah kursor untuk menandakan seluruh item bisa di-klik */
+.transaction-item {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto; /* Kolom utama | Kolom Aksi */
+    gap: 15px;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eef1f5;
+}
+.transaction-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Penataan baru untuk kolom utama */
+.tx-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Gaya untuk detail item yang tersembunyi */
+.tx-item-details {
+    /* Posisikan di bawah, memanjang selebar item */
+    grid-column: 1 / -1; 
+    padding: 15px;
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    border-radius: 6px;
+    animation: fadeIn 0.3s ease;
+}
+
+.tx-item-details.hidden {
+    display: none;
+}
+
+.tx-item-details p { margin-top: 0; margin-bottom: 8px; font-weight: bold; }
+.tx-item-details ul { margin: 0; padding-left: 20px; }
+.tx-item-details li { padding: 2px 0; color: #555; }
+
+/* Animasi sederhana */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
