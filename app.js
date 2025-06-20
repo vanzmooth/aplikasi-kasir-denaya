@@ -536,19 +536,28 @@ function fetchTransactions() {
             let itemsDetailHtml = '<ul class="tx-items-list">';
             tx.items.forEach(item => { itemsDetailHtml += `<li>${item.name} (x${item.quantity})</li>`; });
             itemsDetailHtml += '</ul>';
+            // --- LOGIKA BARU UNTUK TOMBOL PINTAR ---
+            const isFinished = tx.status === 'Selesai';
+            const isReady = tx.status === 'Siap Diambil';
+            let buttonText = 'Tandai Siap';
+            if (isReady) {
+                buttonText = 'Selesaikan';
+            }
             const txItem = document.createElement('div');
             txItem.className = 'transaction-item';
             txItem.innerHTML = `
-    <div class="tx-summary">
-        <div class="tx-info">
-            <span class="tx-queue">#${tx.queueNumber || '-'}</span>
-            <div class="tx-details">
-                <span class="tx-customer-name">${tx.customerName || ''}</span>
-                <span class="tx-total">${formatRupiah(tx.totalAmount)}</span>
+    <div class="tx-main-info">
+        <div class="tx-summary">
+            <div class="tx-info">
+                <span class="tx-queue">#${tx.queueNumber || '-'}</span>
+                <div class="tx-details">
+                    <span class="tx-customer-name">${tx.customerName || ''}</span>
+                    <span class="tx-total">${formatRupiah(tx.totalAmount)}</span>
+                </div>
             </div>
-        </div>
-        <div class="tx-status">
-            <span class="status-badge ${tx.status === 'Selesai' ? 'status-complete' : (tx.status === 'Siap Diambil' ? 'status-ready' : 'status-preparing')}">${tx.status || 'N/A'}</span>
+            <div class="tx-status">
+                <span class="status-badge ${isFinished ? 'status-complete' : (isReady ? 'status-ready' : 'status-preparing')}">${tx.status || 'N/A'}</span>
+            </div>
         </div>
         <div class="tx-date">${txDate}</div>
     </div>
@@ -558,17 +567,12 @@ function fetchTransactions() {
         <button class="btn-action btn-change-status" 
                 data-id="${tx.id}" 
                 data-status="${tx.status}" 
-                ${tx.status === 'Selesai' || tx.status === 'Siap Diambil' ? 'disabled' : ''}>
-            Tandai Siap
-        </button>
-        <button class="btn-action btn-complete-status" 
-                data-id="${tx.id}" 
-                data-status="${tx.status}" 
-                ${tx.status !== 'Siap Diambil' ? 'disabled' : ''}>
-            Selesaikan
+                ${isFinished ? 'disabled' : ''}>
+            ${buttonText}
         </button>
     </div>
-                <div class="tx-item-details hidden">
+
+    <div class="tx-item-details hidden">
         <p><strong>Rincian Pesanan:</strong></p>
         ${itemsDetailHtml}
     </div>`;
@@ -739,27 +743,33 @@ validationListEl.addEventListener('click', async (event) => {
 });
 
 // Ganti seluruh listener transactionListEl Anda dengan ini
+// Ganti seluruh listener transactionListEl Anda dengan ini
 transactionListEl.addEventListener('click', async (event) => {
     const target = event.target;
 
-    // --- BAGIAN 1: PROSES JIKA YANG DIKLIK ADALAH TOMBOL ---
+    // --- BAGIAN 1: PROSES TOMBOL AKSI ---
     if (target.classList.contains('btn-action')) {
         const transactionId = target.dataset.id;
         if (!transactionId) return;
 
-        // Logika untuk tombol Ubah Status -> "Tandai Siap"
+        // Logika untuk tombol Ubah Status (Tandai Siap / Selesaikan)
         if (target.classList.contains('btn-change-status')) {
-            if (target.dataset.status === "Sedang Disiapkan") {
-                try { await db.collection('transactions').doc(transactionId).update({ status: "Siap Diambil" }); }
-                catch (error) { console.error("Gagal update status:", error); }
-            }
-        }
+            const currentStatus = target.dataset.status;
+            let newStatus = '';
 
-        // Logika untuk tombol Selesaikan
-        if (target.classList.contains('btn-complete-status')) {
-            if (target.dataset.status === "Siap Diambil") {
-                try { await db.collection('transactions').doc(transactionId).update({ status: "Selesai" }); }
-                catch (error) { console.error("Gagal update status:", error); }
+            if (currentStatus === "Sedang Disiapkan") {
+                newStatus = "Siap Diambil";
+            } else if (currentStatus === "Siap Diambil") {
+                newStatus = "Selesai";
+            }
+
+            if (newStatus) {
+                try {
+                    await db.collection('transactions').doc(transactionId).update({ status: newStatus });
+                } catch (error) {
+                    console.error("Gagal update status:", error);
+                    alert("Gagal update status.");
+                }
             }
         }
 
@@ -775,10 +785,10 @@ transactionListEl.addEventListener('click', async (event) => {
                 alert(`Gagal mencetak ulang struk: ${error.message}`);
             }
         }
-        return; // Hentikan fungsi di sini setelah tombol diproses
+        return; // Hentikan setelah tombol diproses
     }
 
-    // --- BAGIAN 2: JIKA BUKAN TOMBOL, JALANKAN BUKA-TUTUP DETAIL ---
+    // --- BAGIAN 2: PROSES BUKA-TUTUP DETAIL ---
     const transactionItem = target.closest('.transaction-item');
     if (transactionItem) {
         const detailsDiv = transactionItem.querySelector('.tx-item-details');
