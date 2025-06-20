@@ -750,16 +750,14 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 /* ================================================= */
 /* --- Gaya untuk Layar Kecil (Responsif) --- */
 /* ================================================= */
+/* GANTI BLOK @media LAMA ANDA DENGAN VERSI LENGKAP INI */
 @media (max-width: 768px) {
 
-    /* Aturan untuk Header (sudah kita buat sebelumnya) */
+    /* Aturan untuk Header (sudah ada) */
     .main-header {
         flex-direction: column;
-        /* Ubah dari baris menjadi kolom */
         align-items: flex-start;
-        /* Ratakan semua ke kiri */
         gap: 15px;
-        /* Beri jarak antar judul dan tombol */
     }
 
     .header-nav {
@@ -767,20 +765,36 @@ input.cart-item-quantity::-webkit-inner-spin-button {
         justify-content: flex-start;
     }
 
-    /* INI BAGIAN KUNCINYA: Membuat saklar menjadi 1 kolom */
+    /* Aturan untuk Saklar (sudah ada) */
     .settings-section {
         grid-template-columns: 1fr;
-        gap: 20px;
-        /* Jarak vertikal antar saklar */
+        gap: 15px;
     }
 
-    .setting-item {
-        /* Opsional: Jika ingin label di atas tombol di mode mobile */
-        /* flex-direction: column; 
-        align-items: flex-start;
-        gap: 8px; */
+    /* --- PERBAIKAN BARU UNTUK RIWAYAT TRANSAKSI DI HP --- */
+    .transaction-item {
+        /* Ubah dari grid 2 kolom menjadi 1 kolom saja */
+        grid-template-columns: 1fr;
+        gap: 10px;
+        /* Memberi jarak antar info dan tombol yang sekarang vertikal */
     }
 
+    .tx-summary {
+        /* Atur ulang agar tanggal berada di bawah info utama */
+        flex-wrap: wrap;
+    }
+
+    .tx-date {
+        /* Pindahkan tanggal agar berada di bawah dengan lebar penuh */
+        width: 100%;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+    .tx-actions {
+        /* Buat tombol-tombolnya berjejer dari kanan */
+        justify-content: flex-end;
+    }
 }
 
 /* ================================================= */
@@ -899,12 +913,14 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 .transaction-item {
     cursor: pointer;
     display: grid;
-    grid-template-columns: 1fr auto; /* Kolom utama | Kolom Aksi */
+    grid-template-columns: 1fr auto;
+    /* Kolom utama | Kolom Aksi */
     gap: 15px;
     align-items: center;
     padding: 12px 15px;
     border-bottom: 1px solid #eef1f5;
 }
+
 .transaction-item:hover {
     background-color: #f8f9fa;
 }
@@ -919,7 +935,7 @@ input.cart-item-quantity::-webkit-inner-spin-button {
 /* Gaya untuk detail item yang tersembunyi */
 .tx-item-details {
     /* Posisikan di bawah, memanjang selebar item */
-    grid-column: 1 / -1; 
+    grid-column: 1 / -1;
     padding: 15px;
     margin-top: 10px;
     background-color: #f8f9fa;
@@ -932,12 +948,31 @@ input.cart-item-quantity::-webkit-inner-spin-button {
     display: none;
 }
 
-.tx-item-details p { margin-top: 0; margin-bottom: 8px; font-weight: bold; }
-.tx-item-details ul { margin: 0; padding-left: 20px; }
-.tx-item-details li { padding: 2px 0; color: #555; }
+.tx-item-details p {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.tx-item-details ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.tx-item-details li {
+    padding: 2px 0;
+    color: #555;
+}
 
 /* Animasi sederhana */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
