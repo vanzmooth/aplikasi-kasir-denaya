@@ -1,61 +1,107 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Pesanan Anda</title>
-<style>
-    body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; transition: background-color 0.5s ease; }
-    .status-card { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
-    #queue-number-display { font-size: 5rem; font-weight: bold; color: #333; margin: 10px 0; }
-    #status-display {
-        font-size: 1.5rem;
-        padding: 10px 20px;
-        border-radius: 20px;
-        transition: background-color 0.5s, color 0.5s;
-        /* color: white; <-- BARIS INI DIHAPUS */
-    }
-    .loading { 
-        font-size: 1.2rem; 
-        color: #888; /* Abu-abu */
-        background-color: #f8f9fa; /* Latar belakang netral */
-    }
-    .status-preparing { 
-        background-color: #ffc107; /* Kuning */
-        color: #333; /* Teks gelap agar terbaca */
-    }
-    .status-ready { 
-        background-color: #28a745; /* Hijau */
-        color: white; /* Teks putih */
-    }
-    .status-error { 
-        background-color: #dc3545; /* Merah */
-        color: white; /* Teks putih */
-    }
-    .status-complete { 
-    background-color: #6c757d; /* Abu-abu gelap */
-    color: white; /* Teks putih */
-}
-/* Di dalam <style> di status.html */
-.status-complete {
-    background-color: #6c757d;
-    color: white;
-}
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            transition: background-color 0.5s ease;
+        }
 
-</style>
+        .status-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #queue-number-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        #status-display {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: background-color 0.5s, color 0.5s;
+            /* color: white; <-- BARIS INI DIHAPUS */
+        }
+
+        .loading {
+            font-size: 1.2rem;
+            color: #888;
+            /* Abu-abu */
+            background-color: #f8f9fa;
+            /* Latar belakang netral */
+        }
+
+        .status-preparing {
+            background-color: #ffc107;
+            /* Kuning */
+            color: #333;
+            /* Teks gelap agar terbaca */
+        }
+
+        .status-ready {
+            background-color: #28a745;
+            /* Hijau */
+            color: white;
+            /* Teks putih */
+        }
+
+        .status-error {
+            background-color: #dc3545;
+            /* Merah */
+            color: white;
+            /* Teks putih */
+        }
+
+        .status-complete {
+            background-color: #6c757d;
+            /* Abu-abu gelap */
+            color: white;
+            /* Teks putih */
+        }
+
+        /* Di dalam <style> di status.html */
+        .status-complete {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
 
 </head>
+
 <body>
     <div class="status-card">
-      <h2 id="customer-name-display"></h2>
+        <h2 id="customer-name-display"></h2>
         <p>Nomor Antrian Anda:</p>
         <h1 id="queue-number-display">-</h1>
         <p>Status Pesanan:</p>
         <div id="status-display" class="loading">Memuat...</div>
     </div>
-
+    <div class="watermark">Aplikasi Kasir Jajanan Denaya</div>
+    <footer class="app-footer">
+        <p>&copy; 2025 Jajanan Denaya. Dibuat oleh Gemini & Pandu.</p>
+    </footer>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
     <script src="status.js"></script>
 </body>
+
 </html>

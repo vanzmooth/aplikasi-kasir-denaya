@@ -12,7 +12,7 @@ body {
     background-color: white;
     padding: 30px 40px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 350px;
     text-align: center;
@@ -61,7 +61,35 @@ h2 {
 }
 
 .error-text {
-    color: #dc3545; /* Merah */
+    color: #dc3545;
+    /* Merah */
     margin-top: 15px;
-    height: 20px; /* Beri ruang agar layout tidak bergeser */
+    height: 20px;
+    /* Beri ruang agar layout tidak bergeser */
+}
+
+.app-footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 0.8em;
+    color: #888;
+}
+
+.watermark {
+    position: fixed;
+    /* Membuatnya melayang di atas konten lain */
+    bottom: 10px;
+    /* 10px dari bawah */
+    right: 15px;
+    /* 15px dari kanan */
+    font-size: 12px;
+    color: #000;
+    opacity: 0.15;
+    /* Kunci: membuatnya semi-transparan */
+    z-index: 9999;
+    /* Pastikan ia selalu di paling atas */
+    pointer-events: none;
+    /* Kunci: membuatnya tidak bisa di-klik agar tidak mengganggu tombol di bawahnya */
+    user-select: none;
+    /* Agar teksnya tidak bisa dipilih/di-copy */
 }
