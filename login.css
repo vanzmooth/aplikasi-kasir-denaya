@@ -1,6 +1,9 @@
+/* ...DENGAN VERSI INI */
 body {
     font-family: 'Segoe UI', sans-serif;
     display: flex;
+    flex-direction: column;
+    /* <-- TAMBAHKAN BARIS INI */
     justify-content: center;
     align-items: center;
     height: 100vh;
