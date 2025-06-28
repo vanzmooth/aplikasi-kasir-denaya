@@ -251,10 +251,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             window.location.href = `status.html?id=${docRef.id}`;
                         });
                     },
+                    // onPENDING: Dijalankan saat transaksi dibuat tapi belum dibayar (misal: saat QRIS ditampilkan).
+                    onPending: function (result) {
+                        console.log("Pembayaran tertunda (pending).", result);
+                        // Jangan lakukan redirect apa pun. Biarkan pelanggan melihat QRIS.
+                        // Cukup pastikan tombol checkout akan aktif kembali jika mereka menutupnya.
+                        footerCheckoutButton.disabled = false;
+                        footerCheckoutButton.textContent = 'Pesan & Bayar';
+                    },
+                    // onERROR: Dijalankan jika ada kesalahan dari Midtrans.
+                    onError: function (result) {
+                        console.error("Pembayaran error!", result);
+                        alert('Terjadi kesalahan pembayaran. Silakan coba lagi.');
+                        footerCheckoutButton.disabled = false;
+                        footerCheckoutButton.textContent = 'Pesan & Bayar';
+                    },
+                    // onClose: Dijalankan SAAT itu juga ketika pelanggan menekan tombol 'X'.
                     onClose: function () {
-                        console.log('Pelanggan menutup popup, kembali ke menu.');
-                        // Paksa redirect kembali ke halaman menu
-                        window.location.href = 'menu.html';
+                        console.log('Pelanggan menutup popup pembayaran.');
+                        // Cukup aktifkan kembali tombolnya, JANGAN redirect.
+                        // Pengaturan di dasbor yang akan menangani redirect jika diperlukan.
+                        footerCheckoutButton.disabled = false;
+                        footerCheckoutButton.textContent = 'Pesan & Bayar';
                     }
                 });
 
