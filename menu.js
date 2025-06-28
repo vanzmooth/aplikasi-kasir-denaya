@@ -269,10 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     // onClose: Dijalankan SAAT itu juga ketika pelanggan menekan tombol 'X'.
                     onClose: function () {
                         console.log('Pelanggan menutup popup pembayaran.');
-                        // Cukup aktifkan kembali tombolnya, JANGAN redirect.
-                        // Pengaturan di dasbor yang akan menangani redirect jika diperlukan.
-                        footerCheckoutButton.disabled = false;
-                        footerCheckoutButton.textContent = 'Pesan & Bayar';
+                        // Temukan tombol footer di sini untuk memastikannya
+                        const footerCheckoutButton = document.getElementById('footer-checkout-button');
+                        if (footerCheckoutButton) {
+                            footerCheckoutButton.disabled = false;
+                            footerCheckoutButton.textContent = 'Pesan & Bayar';
+                        }
                     }
                 });
 
