@@ -608,36 +608,32 @@ function listenForPendingOrders() {
         validationListEl.innerHTML = '';
         let manualOrdersFound = false;
 
-        snapshot.docs.forEach(doc => {
-            const orderData = doc.data();
-            const orderId = doc.id;
+        // Kita hanya proses perubahan di mana ada DOKUMEN BARU DITAMBAHKAN
+        snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+                const orderData = change.doc.data();
+                const orderId = change.doc.id;
 
-            // --- INILAH LOGIKA SAKLAR UTAMANYA ---
-
-            if (orderData.status === 'siap_diproses') {
-                // JIKA OTOMATIS: Langsung proses di sini, JANGAN ditampilkan di panel
-                console.log(`Memproses pesanan otomatis dari ${orderData.customerName}...`);
-                // --- PERBAIKAN URUTAN PARAMETER DI SINI ---
-                // Buat objek paymentInfo terlebih dahulu
-                const paymentInfo = { method: 'otomatis', details: orderData.payment_details || null };
-                finalizeTransaction(orderData.items, orderData.customerName, orderId)
-                    .then(() => {
-                        alert(`Pesanan Otomatis Masuk untuk ${orderData.customerName}!`);
-                    })
-                    .catch(error => {
-                        console.error("Gagal memproses pesanan otomatis:", error);
-                        alert(`GAGAL memproses pesanan dari ${orderData.customerName}: ${error.message}`);
-                        // Hapus pesanan yang gagal agar tidak terjebak
-                        db.collection('pending_orders').doc(orderId).delete();
-                    });
-            }
-            else if (orderData.status === 'menunggu_validasi') {
-                // JIKA MANUAL: Baru tampilkan di panel validasi
-                manualOrdersFound = true;
-                const validationItem = document.createElement('div');
-                validationItem.className = 'validation-item';
-                let itemsSummary = orderData.items.map(item => `${item.name} (x${item.quantity})`).join(', ');
-                validationItem.innerHTML = `
+                if (orderData.status === 'siap_diproses') {
+                    // JIKA OTOMATIS: Langsung proses
+                    console.log(`Pesanan otomatis terdeteksi: ${orderId}`);
+                    const paymentInfo = { method: 'otomatis', details: orderData.payment_details || null };
+                    // Panggil dengan urutan parameter yang benar
+                    finalizeTransaction(orderData.items, paymentInfo, orderData.customerName, orderId)
+                        .then(tx => alert(`Pesanan Otomatis Masuk #${tx.queueNumber} untuk ${tx.customerName}!`))
+                        .catch(error => {
+                            alert(`GAGAL proses otomatis: ${error.message}`);
+                            // Hapus pesanan yg gagal agar tidak 'nyangkut'
+                            db.collection('pending_orders').doc(orderId).delete();
+                        })
+                }
+                else if (orderData.status === 'menunggu_validasi') {
+                    // JIKA MANUAL: Baru tampilkan di panel validasi
+                    manualOrdersFound = true;
+                    const validationItem = document.createElement('div');
+                    validationItem.className = 'validation-item';
+                    let itemsSummary = orderData.items.map(item => `${item.name} (x${item.quantity})`).join(', ');
+                    validationItem.innerHTML = `
                     <p class="validation-name">${orderData.customerName}</p>
                     <p class="validation-details">${itemsSummary}</p>
                     <p class="validation-details"><strong>Total: ${formatRupiah(orderData.totalAmount)}</strong></p>
@@ -646,7 +642,8 @@ function listenForPendingOrders() {
                         <button class="btn-reject" data-id="${orderId}">❌ Tolak</button>
                     </div>
                 `;
-                validationListEl.appendChild(validationItem);
+                    validationListEl.appendChild(validationItem);
+                }
             }
         });
 
