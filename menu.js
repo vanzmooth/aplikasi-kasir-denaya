@@ -252,29 +252,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     },
                     // onPENDING: Dijalankan saat transaksi dibuat tapi belum dibayar (misal: saat QRIS ditampilkan).
-                    onPending: function (result) {
-                        console.log("Pembayaran tertunda (pending).", result);
-                        // Jangan lakukan redirect apa pun. Biarkan pelanggan melihat QRIS.
-                        // Cukup pastikan tombol checkout akan aktif kembali jika mereka menutupnya.
-                        footerCheckoutButton.disabled = false;
-                        footerCheckoutButton.textContent = 'Pesan & Bayar';
+                    onPending: (res) => {
+                        console.log("Pembayaran tertunda:", res);
+                        alert('Pembayaran Anda tertunda. Silakan selesaikan atau coba lagi.');
+                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
                     },
-                    // onERROR: Dijalankan jika ada kesalahan dari Midtrans.
-                    onError: function (result) {
-                        console.error("Pembayaran error!", result);
-                        alert('Terjadi kesalahan pembayaran. Silakan coba lagi.');
-                        footerCheckoutButton.disabled = false;
-                        footerCheckoutButton.textContent = 'Pesan & Bayar';
+                    onError: (res) => {
+                        console.error("Pembayaran gagal:", res);
+                        alert('Pembayaran Gagal. Silakan coba lagi.');
+                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
                     },
-                    // onClose: Dijalankan SAAT itu juga ketika pelanggan menekan tombol 'X'.
-                    onClose: function () {
+                    onClose: () => {
                         console.log('Pelanggan menutup popup pembayaran.');
-                        // Temukan tombol footer di sini untuk memastikannya
-                        const footerCheckoutButton = document.getElementById('footer-checkout-button');
-                        if (footerCheckoutButton) {
-                            footerCheckoutButton.disabled = false;
-                            footerCheckoutButton.textContent = 'Pesan & Bayar';
-                        }
+                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
                     }
                 });
 
