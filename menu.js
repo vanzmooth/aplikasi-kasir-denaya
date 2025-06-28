@@ -251,9 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             window.location.href = `status.html?id=${docRef.id}`;
                         });
                     },
-                    onClose: () => {
-                        checkoutButton.disabled = false;
-                        checkoutButton.textContent = 'Pesan & Bayar Sekarang';
+                    onClose: function () {
+                        console.log('Pelanggan menutup popup, kembali ke menu.');
+                        // Paksa redirect kembali ke halaman menu
+                        window.location.href = 'menu.html';
                     }
                 });
 

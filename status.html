@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Pesanan Anda</title>
     <style>
+        /* ...DENGAN VERSI INI */
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
+            flex-direction: column;
+            /* <-- TAMBAHKAN BARIS INI */
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -82,6 +85,22 @@
         .status-complete {
             background-color: #6c757d;
             color: white;
+        }
+
+        /* Gaya untuk Watermark / Copyright Footer */
+        .app-footer,
+        .watermark {
+            position: fixed;
+            /* Membuatnya melayang dan tidak mempengaruhi layout lain */
+            bottom: 10px;
+            /* 10px dari bawah */
+            width: 100%;
+            /* Lebar penuh */
+            text-align: center;
+            font-size: 0.8em;
+            color: #aaa;
+            pointer-events: none;
+            /* Membuatnya tidak bisa di-klik */
         }
     </style>
 

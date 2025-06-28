@@ -601,6 +601,9 @@ function listenForPendingOrders() {
             if (orderData.status === 'siap_diproses') {
                 // JIKA OTOMATIS: Langsung proses di sini, JANGAN ditampilkan di panel
                 console.log(`Memproses pesanan otomatis dari ${orderData.customerName}...`);
+                // --- PERBAIKAN URUTAN PARAMETER DI SINI ---
+                // Buat objek paymentInfo terlebih dahulu
+                const paymentInfo = { method: 'otomatis', details: orderData.payment_details || null };
                 finalizeTransaction(orderData.items, orderData.customerName, orderId)
                     .then(() => {
                         alert(`Pesanan Otomatis Masuk untuk ${orderData.customerName}!`);

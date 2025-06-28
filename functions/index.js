@@ -82,10 +82,20 @@ exports.createMidtransTransaction = onRequest(async (request, response) => {
                     },
                     customer_details: {
                         first_name: data.customerDetails.name,
-                        email: data.customerDetails.email || "customer@example.com",
-                        phone: data.customerDetails.phone || "08123456789",
+                        phone: data.customerDetails.phone || "",
                     },
                     item_details: data.items || [],
+                    // --- TAMBAHKAN BLOK BARU INI ---
+                    // callbacks: {
+                    //     // URL tujuan saat pembayaran SUKSES (setelah pelanggan scan dan bayar)
+                    //     finish: `https://jajanan-denaya.netlify.app/menu.html`,
+
+                    //     // URL tujuan saat pelanggan BATAL atau menekan 'X' (INI KUNCINYA!)
+                    //     unfinish: `https://jajanan-denaya.netlify.app/menu.html`,
+
+                    //     // URL tujuan jika terjadi ERROR pada sistem Midtrans
+                    //     error: `https://jajanan-denaya.netlify.app/menu.html`
+                    // }
                 };
 
                 console.log("Creating transaction with parameter:", parameter);
