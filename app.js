@@ -393,6 +393,22 @@ async function getNextQueueNumber() {
 // Pastikan fungsi finalizeTransaction Anda seperti ini
 // GANTI FUNGSI INI DI app.js
 async function finalizeTransaction(items, paymentInfo = {}, customerName = 'Walk-in Customer', originalOrderId = null) {
+    // --- PENGECEKAN STOK DI AWAL (INTI PERBAIKAN) ---
+    // Sebelum memulai transaksi apa pun, kita cek dulu stok di sisi aplikasi
+    const stockNeeded = {};
+    items.forEach(item => {
+        if (item.stock_id) {
+            stockNeeded[item.stock_id] = (stockNeeded[item.stock_id] || 0) + item.quantity;
+        }
+    });
+
+    for (const stockId in stockNeeded) {
+        if (!inventory[stockId] || inventory[stockId] < stockNeeded[stockId]) {
+            // Jika stok tidak cukup, hentikan proses SEKARANG dan lempar error yang jelas
+            throw new Error(`Stok untuk ${stockId.replace(/_/g, ' ')} tidak mencukupi! Sisa: ${inventory[stockId] || 0}.`);
+        }
+    }
+    // --- AKHIR PENGECEKAN STOK ---
     await updateStock(items);
     const queueNumber = await getNextQueueNumber();
     const totalAmount = items.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0);
