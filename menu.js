@@ -255,16 +255,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     onPending: (res) => {
                         console.log("Pembayaran tertunda:", res);
                         alert('Pembayaran Anda tertunda. Silakan selesaikan atau coba lagi.');
-                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
+                        CheckoutButton.disabled = false; CheckoutButton.textContent = 'Pesan & Bayar';
                     },
                     onError: (res) => {
                         console.error("Pembayaran gagal:", res);
                         alert('Pembayaran Gagal. Silakan coba lagi.');
-                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
+                        CheckoutButton.disabled = false; CheckoutButton.textContent = 'Pesan & Bayar';
                     },
                     onClose: () => {
                         console.log('Pelanggan menutup popup pembayaran.');
-                        footerCheckoutButton.disabled = false; footerCheckoutButton.textContent = 'Pesan & Bayar';
+                        CheckoutButton.disabled = false; CheckoutButton.textContent = 'Pesan & Bayar';
                     }
                 });
 
